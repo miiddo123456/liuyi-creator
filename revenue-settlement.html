@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>结算记录 - 六翼剧场创作者后台</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">六翼剧场创作者后台</div>
+  <nav class="sidebar-menu">
+    <a class="menu-single" href="dashboard.html">工作台</a>
+    <div class="menu-category" onclick="toggleMenu(this)">
+      收益管理 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="revenue-list.html">收益明细</a>
+      <a class="sub-item" href="revenue-withdraw.html">提现</a>
+      <a class="sub-item active" href="revenue-settlement.html">结算记录</a>
+    </div>
+    <div class="menu-category" onclick="toggleMenu(this)">
+      我的推广 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="promotion-dramas.html">推广剧目</a>
+      <a class="sub-item" href="promotion-data.html">推广数据</a>
+      <a class="sub-item" href="promotion-team.html">推广团队</a>
+    </div>
+    <div class="menu-category" onclick="toggleMenu(this)">
+      账户中心 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="account-real-name.html">实名认证</a>
+      <a class="sub-item" href="account-payment.html">收款账户</a>
+      <a class="sub-item" href="account-security.html">安全设置</a>
+      <a class="sub-item" href="account-profile.html">个人资料</a>
+    </div>
+  </nav>
+</aside>
+
+<div class="main">
+  <header class="header">
+    <div class="header-left"><span>📑 结算记录</span></div>
+    <div class="header-right">
+      <div class="user-info" onclick="event.stopPropagation();toggleUserMenu(event)" style="cursor:pointer;position:relative;">
+        <div class="avatar" style="cursor:pointer;">许</div>
+        <div style="display:flex;flex-direction:column;">
+          <div style="font-weight:500;font-size:14px;color:#444;">许锦超</div>
+          <div style="font-size:12px;color:#aaa;">达人ID: DR23001</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <!-- 年度汇总 -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;">
+      <div style="padding:16px 20px;border:1px solid #eee;border-radius:10px;">
+        <div style="font-size:12px;color:#aaa;" id="yearLabel1">2026年累计收益</div>
+        <div style="font-size:24px;font-weight:700;color:#222;margin-top:4px;" id="yearTotalRevenue">¥25,068.80</div>
+      </div>
+      <div style="padding:16px 20px;border:1px solid #eee;border-radius:10px;">
+        <div style="font-size:12px;color:#aaa;" id="yearLabel2">累计代扣税</div>
+        <div style="font-size:24px;font-weight:700;color:#222;margin-top:4px;" id="yearTotalTax">¥2,399.88</div>
+      </div>
+      <div style="padding:16px 20px;border:1px solid #eee;border-radius:10px;">
+        <div style="font-size:12px;color:#aaa;" id="yearLabel3">累计实发金额</div>
+        <div style="font-size:24px;font-weight:700;color:#222;margin-top:4px;" id="yearTotalNet">¥22,556.92</div>
+      </div>
+      <div style="padding:16px 20px;border:1px solid #eee;border-radius:10px;">
+        <div style="font-size:12px;color:#aaa;" id="yearLabel4">已结算月份</div>
+        <div style="font-size:24px;font-weight:700;color:#222;margin-top:4px;" id="yearTotalMonths">7 个月</div>
+      </div>
+    </div>
+
+    <!-- 年份切换 -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+      <button class="btn btn-sm" onclick="switchYear(2026)" id="yearBtn2026" style="background:#e67e22;color:#fff;border-color:#e67e22;font-weight:500;">2026年</button>
+      <button class="btn btn-sm" onclick="switchYear(2025)" id="yearBtn2025">2025年</button>
+      <span style="font-size:12px;color:#bbb;margin-left:auto;">点击月份可查看当月结算明细</span>
+    </div>
+
+    <!-- 月度列表 -->
+    <div class="card" style="padding:0;">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>结算月份</th><th>总收益</th><th>代扣税 (10%)</th><th>实发金额</th><th>结算状态</th><th>结算日期</th><th style="width:80px;">操作</th></tr>
+          </thead>
+          <tbody id="settlementBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 结算明细弹窗 -->
+<div class="modal-overlay" id="settleModal">
+  <div class="modal" style="width:600px;">
+    <div class="modal-header">
+      <span>结算明细 - <span id="settleMonth">2026年5月</span></span>
+      <button class="modal-close" onclick="hideModal('settleModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- 汇总 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
+        <div style="text-align:center;padding:16px;background:#fafafa;">
+          <div style="font-size:12px;color:#aaa;">总收益</div>
+          <div style="font-size:22px;font-weight:600;color:#222;">¥6,892.50</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:#fafafa;">
+          <div style="font-size:12px;color:#aaa;">代扣税 (10%)</div>
+          <div style="font-size:22px;font-weight:600;color:#888;">¥689.25</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:#fafafa;">
+          <div style="font-size:12px;color:#aaa;">实发金额</div>
+          <div style="font-size:22px;font-weight:600;color:#222;">¥6,203.25</div>
+        </div>
+      </div>
+
+      <div style="font-weight:500;color:#555;margin-bottom:12px;font-size:14px;">佣金构成明细</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>剧目</th><th>订单数</th><th>佣金金额</th><th>占比</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>盛夏芬德拉</td><td>32</td><td style="font-weight:600;">¥2,460.00</td><td style="color:#888;">35.7%</td></tr>
+            <tr><td>好一个乖乖女</td><td>28</td><td style="font-weight:600;">¥1,890.00</td><td style="color:#888;">27.4%</td></tr>
+            <tr><td>家里家外2</td><td>18</td><td style="font-weight:600;">¥1,320.00</td><td style="color:#888;">19.2%</td></tr>
+            <tr><td>一品布衣2:烽火篇</td><td>12</td><td style="font-weight:600;">¥892.50</td><td style="color:#888;">12.9%</td></tr>
+            <tr><td>活动奖励</td><td>—</td><td style="font-weight:600;">¥330.00</td><td style="color:#888;">4.8%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:16px;padding:12px 16px;background:#fafafa;border:1px solid #f0f0f0;font-size:13px;color:#888;">
+        结算说明：本月结算周期为 2026-05-01 至 2026-05-31，税款按劳务报酬所得代扣代缴。
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="hideModal('settleModal')">关闭</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  // ====== 结算数据 ======
+  const settlementData = {
+    2026: [
+      { month: '2026年6月', total: 8926.30, tax: 892.63, net: 8033.67, status: '待结算', date: '—' },
+      { month: '2026年5月', total: 6892.50, tax: 689.25, net: 6203.25, status: '已结算', date: '2026-06-05' },
+      { month: '2026年4月', total: 5420.00, tax: 542.00, net: 4878.00, status: '已结算', date: '2026-05-03' },
+      { month: '2026年3月', total: 4180.00, tax: 418.00, net: 3762.00, status: '已结算', date: '2026-04-02' },
+      { month: '2026年2月', total: 3560.00, tax: 356.00, net: 3204.00, status: '已结算', date: '2026-03-05' },
+      { month: '2026年1月', total: 2890.00, tax: 289.00, net: 2601.00, status: '已结算', date: '2026-02-03' }
+    ],
+    2025: [
+      { month: '2025年12月', total: 2120.00, tax: 212.00, net: 1908.00, status: '已结算', date: '2026-01-04' },
+      { month: '2025年11月', total: 1860.00, tax: 186.00, net: 1674.00, status: '已结算', date: '2025-12-05' },
+      { month: '2025年10月', total: 1530.00, tax: 153.00, net: 1377.00, status: '已结算', date: '2025-11-03' },
+      { month: '2025年9月',  total: 1280.00, tax: 128.00, net: 1152.00, status: '已结算', date: '2025-10-05' },
+      { month: '2025年8月',  total: 1050.00, tax: 105.00, net: 945.00,  status: '已结算', date: '2025-09-04' },
+      { month: '2025年7月',  total: 890.00,  tax: 89.00,  net: 801.00,  status: '已结算', date: '2025-08-03' },
+      { month: '2025年6月',  total: 760.00,  tax: 76.00,  net: 684.00,  status: '已结算', date: '2025-07-05' },
+      { month: '2025年5月',  total: 620.00,  tax: 62.00,  net: 558.00,  status: '已结算', date: '2025-06-04' }
+    ]
+  };
+
+  let currentYear = 2026;
+
+  const detailData = {
+    '2026年6月': [
+      { drama: '盛夏芬德拉', orders: 42, commission: 3680.00, pct: '41.2%' },
+      { drama: '好一个乖乖女', orders: 35, commission: 2210.00, pct: '24.8%' },
+      { drama: '家里家外2', orders: 22, commission: 1560.00, pct: '17.5%' },
+      { drama: '一品布衣2:烽火篇', orders: 15, commission: 1026.30, pct: '11.5%' },
+      { drama: '活动奖励', orders: '—', commission: 450.00, pct: '5.0%' }
+    ],
+    '2026年5月': [
+      { drama: '盛夏芬德拉', orders: 32, commission: 2460.00, pct: '35.7%' },
+      { drama: '好一个乖乖女', orders: 28, commission: 1890.00, pct: '27.4%' },
+      { drama: '家里家外2', orders: 18, commission: 1320.00, pct: '19.2%' },
+      { drama: '一品布衣2:烽火篇', orders: 12, commission: 892.50, pct: '12.9%' },
+      { drama: '活动奖励', orders: '—', commission: 330.00, pct: '4.8%' }
+    ],
+    '2026年4月': [
+      { drama: '好一个乖乖女', orders: 25, commission: 1850.00, pct: '34.1%' },
+      { drama: '盛夏芬德拉', orders: 20, commission: 1620.00, pct: '29.9%' },
+      { drama: '家里家外2', orders: 14, commission: 980.00, pct: '18.1%' },
+      { drama: '一品布衣2:烽火篇', orders: 10, commission: 620.00, pct: '11.4%' },
+      { drama: '活动奖励', orders: '—', commission: 350.00, pct: '6.5%' }
+    ],
+    '2025年12月': [
+      { drama: '盛夏芬德拉', orders: 15, commission: 780.00, pct: '36.8%' },
+      { drama: '好一个乖乖女', orders: 12, commission: 520.00, pct: '24.5%' },
+      { drama: '家里家外2', orders: 8, commission: 360.00, pct: '17.0%' },
+      { drama: '活动奖励', orders: '—', commission: 460.00, pct: '21.7%' }
+    ],
+    '2025年11月': [
+      { drama: '好一个乖乖女', orders: 14, commission: 620.00, pct: '33.3%' },
+      { drama: '盛夏芬德拉', orders: 10, commission: 480.00, pct: '25.8%' },
+      { drama: "南城待月归", orders: 8, commission: 360.00, pct: '19.4%' },
+      { drama: '活动奖励', orders: '—', commission: 400.00, pct: '21.5%' }
+    ]
+  };
+
+  function switchYear(year) {
+    currentYear = year;
+    const data = settlementData[year];
+    if (!data) return;
+
+    // 切换按钮高亮
+    document.getElementById('yearBtn2026').style.background = year === 2026 ? '#e67e22' : '';
+    document.getElementById('yearBtn2026').style.color = year === 2026 ? '#fff' : '';
+    document.getElementById('yearBtn2026').style.borderColor = year === 2026 ? '#e67e22' : '';
+    document.getElementById('yearBtn2025').style.background = year === 2025 ? '#e67e22' : '';
+    document.getElementById('yearBtn2025').style.color = year === 2025 ? '#fff' : '';
+    document.getElementById('yearBtn2025').style.borderColor = year === 2025 ? '#e67e22' : '';
+
+    // 更新汇总
+    const totalRev = data.reduce((s, d) => s + d.total, 0);
+    const totalTax = data.reduce((s, d) => s + d.tax, 0);
+    const totalNet = data.reduce((s, d) => s + d.net, 0);
+    document.getElementById('yearLabel1').textContent = year + '年累计收益';
+    document.getElementById('yearTotalRevenue').textContent = '¥' + totalRev.toFixed(2);
+    document.getElementById('yearTotalTax').textContent = '¥' + totalTax.toFixed(2);
+    document.getElementById('yearTotalNet').textContent = '¥' + totalNet.toFixed(2);
+    document.getElementById('yearTotalMonths').textContent = data.length + ' 个月';
+
+    // 渲染表格
+    const tbody = document.getElementById('settlementBody');
+    tbody.innerHTML = '';
+    data.forEach(d => {
+      const statusClass = d.status === '已结算' ? 'tag-success' : 'tag-default';
+      const tr = document.createElement('tr');
+      const yearLabel = d.month;
+      tr.innerHTML = `
+        <td style="font-weight:500;">${yearLabel}</td>
+        <td style="font-weight:600;">¥${d.total.toFixed(2)}</td>
+        <td style="color:#888;">¥${d.tax.toFixed(2)}</td>
+        <td style="font-weight:600;">¥${d.net.toFixed(2)}</td>
+        <td><span class="tag ${statusClass}">${d.status}</span></td>
+        <td style="color:#aaa;">${d.date}</td>
+        <td><a class="btn-link" onclick='showSettlementDetail("${d.month}")'>查看</a></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function showSettlementDetail(month) {
+    document.getElementById('settleMonth').textContent = month;
+    const details = detailData[month];
+    if (!details) {
+      document.querySelector('#settleModal .modal-body').innerHTML = '<div style="text-align:center;padding:40px;color:#aaa;">暂无该月详细数据</div>';
+      showModal('settleModal');
+      return;
+    }
+    const total = details.reduce((s, d) => s + d.commission, 0);
+    const tax = Math.round(total * 0.1 * 100) / 100;
+    const net = Math.round((total - tax) * 100) / 100;
+
+    let html = `
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
+        <div style="text-align:center;padding:16px;background:#fafafa;border-radius:10px;">
+          <div style="font-size:12px;color:#aaa;">总收益</div>
+          <div style="font-size:22px;font-weight:600;color:#222;">¥${total.toFixed(2)}</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:#fafafa;border-radius:10px;">
+          <div style="font-size:12px;color:#aaa;">代扣税 (10%)</div>
+          <div style="font-size:22px;font-weight:600;color:#888;">¥${tax.toFixed(2)}</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:#fafafa;border-radius:10px;">
+          <div style="font-size:12px;color:#aaa;">实发金额</div>
+          <div style="font-size:22px;font-weight:600;color:#222;">¥${net.toFixed(2)}</div>
+        </div>
+      </div>
+      <div style="font-weight:500;color:#555;margin-bottom:12px;font-size:14px;">佣金构成明细</div>
+      <div class="table-wrap"><table><thead><tr><th>剧目</th><th>订单数</th><th>佣金金额</th><th>占比</th></tr></thead><tbody>`;
+    details.forEach(d => {
+      html += `<tr><td>${d.drama}</td><td>${d.orders}</td><td style="font-weight:600;">¥${d.commission.toFixed(2)}</td><td style="color:#888;">${d.pct}</td></tr>`;
+    });
+    html += `</tbody></table></div>
+      <div style="margin-top:16px;padding:12px 16px;background:#fafafa;border:1px solid #f0f0f0;font-size:13px;color:#888;border-radius:8px;">
+        结算说明：本月结算周期为自然月，税款按劳务报酬所得代扣代缴。
+      </div>`;
+    document.querySelector('#settleModal .modal-body').innerHTML = html;
+    showModal('settleModal');
+  }
+
+  // 初始化：显示2026年
+  switchYear(2026);
+</script>
+</body>
+</html>

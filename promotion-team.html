@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>推广团队 - 六翼剧场创作者后台</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .member-card { border: 1px solid #ebebeb; border-radius: 12px; padding: 20px; background: #fff; transition: all .2s; }
+    .member-card:hover { border-color: #e67e22; box-shadow: 0 4px 16px rgba(230,126,34,.08); }
+    .member-card .avatar-box { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; color: #fff; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">六翼剧场创作者后台</div>
+  <nav class="sidebar-menu">
+    <a class="menu-single" href="dashboard.html">工作台</a>
+    <div class="menu-category" onclick="toggleMenu(this)">
+      收益管理 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="revenue-list.html">收益明细</a>
+      <a class="sub-item" href="revenue-withdraw.html">提现</a>
+      <a class="sub-item" href="revenue-settlement.html">结算记录</a>
+    </div>
+    <div class="menu-category" onclick="toggleMenu(this)">
+      我的推广 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="promotion-dramas.html">推广剧目</a>
+      <a class="sub-item" href="promotion-data.html">推广数据</a>
+      <a class="sub-item active" href="promotion-team.html">推广团队</a>
+    </div>
+    <div class="menu-category" onclick="toggleMenu(this)">
+      账户中心 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="account-real-name.html">实名认证</a>
+      <a class="sub-item" href="account-payment.html">收款账户</a>
+      <a class="sub-item" href="account-security.html">安全设置</a>
+      <a class="sub-item" href="account-profile.html">个人资料</a>
+    </div>
+  </nav>
+</aside>
+
+<div class="main">
+  <header class="header">
+    <div class="header-left">👥 推广团队</div>
+    <div class="header-right">
+      <div class="user-info" onclick="event.stopPropagation();toggleUserMenu(event)" style="cursor:pointer;position:relative;">
+        <div class="avatar" style="cursor:pointer;">许</div>
+        <div style="display:flex;flex-direction:column;">
+          <div style="font-weight:600;font-size:14px;color:#333;">许锦超</div>
+          <div style="font-size:12px;color:#aaa;">达人ID: DR23001</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <!-- 团队总览 -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+      <div style="padding:18px 20px;border:1px solid #ebebeb;border-radius:10px;background:#fff;">
+        <div style="font-size:12px;color:#aaa;letter-spacing:0.5px;">团队成员</div>
+        <div style="font-size:26px;font-weight:700;color:#1a1a2e;margin-top:4px;">5 人</div>
+        <div style="font-size:12px;color:#bbb;margin-top:2px;">含本人及4名成员</div>
+      </div>
+      <div style="padding:18px 20px;border:1px solid #ebebeb;border-radius:10px;background:#fff;">
+        <div style="font-size:12px;color:#aaa;letter-spacing:0.5px;">团队总收益</div>
+        <div style="font-size:26px;font-weight:700;color:#1a1a2e;margin-top:4px;">¥73,570.68</div>
+        <div style="font-size:12px;color:#bbb;margin-top:2px;">本月累计</div>
+      </div>
+      <div style="padding:18px 20px;border:1px solid #ebebeb;border-radius:10px;background:#fff;">
+        <div style="font-size:12px;color:#aaa;letter-spacing:0.5px;">团队推广次数</div>
+        <div style="font-size:26px;font-weight:700;color:#1a1a2e;margin-top:4px;">4,826</div>
+        <div style="font-size:12px;color:#bbb;margin-top:2px;">本月累计</div>
+      </div>
+      <div style="padding:18px 20px;border:1px solid #ebebeb;border-radius:10px;background:#fff;">
+        <div style="font-size:12px;color:#aaa;letter-spacing:0.5px;">团队转化率</div>
+        <div style="font-size:26px;font-weight:700;color:#1a1a2e;margin-top:4px;">11.8%</div>
+        <div style="font-size:12px;color:#bbb;margin-top:2px;">较上月 +2.3%</div>
+      </div>
+    </div>
+
+    <!-- 成员列表 -->
+    <div class="card" style="padding:0;">
+      <div class="card-header" style="padding:16px 20px;margin:0;border-bottom:1px solid #f0f0f0;">
+        <span>👥 团队成员收益</span>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:12px;color:#aaa;">团队总收益 ¥73,570.68</span>
+          <button class="btn btn-sm btn-primary" onclick="showModal('addMemberModal')">＋ 新增成员</button>
+        </div>
+      </div>
+      <div style="padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <!-- 本人 -->
+        <div class="member-card" style="border-color:#e67e22;background:#fef9f4;cursor:pointer;" onclick="showMemberDetail('许锦超')">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div class="avatar-box" style="background:#e67e22;">许</div>
+            <div style="flex:1;">
+              <div style="font-weight:600;color:#333;">许锦超 <span style="font-size:11px;color:#e67e22;font-weight:500;">（团队长）</span></div>
+              <div style="font-size:12px;color:#aaa;margin-top:2px;">达人ID: DR23001 · 本月推广 1,860 次</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:18px;font-weight:700;color:#222;">¥32,158.42</div>
+              <div style="font-size:11px;color:#bbb;">团队占比 43.7%</div>
+            </div>
+          </div>
+        </div>
+        <!-- 苏文棨 -->
+        <div class="member-card" onclick="showMemberDetail('苏文棨')" style="cursor:pointer;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div class="avatar-box" style="background:#4a90d9;">苏</div>
+            <div style="flex:1;">
+              <div style="font-weight:600;color:#333;">苏文棨</div>
+              <div style="font-size:12px;color:#aaa;margin-top:2px;">达人ID: DR23002 · 本月推广 1,240 次</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:18px;font-weight:700;color:#222;">¥18,245.60</div>
+              <div style="font-size:11px;color:#bbb;">团队占比 24.8%</div>
+            </div>
+          </div>
+        </div>
+        <!-- 卢熙模 -->
+        <div class="member-card" onclick="showMemberDetail('卢熙模')" style="cursor:pointer;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div class="avatar-box" style="background:#50b86c;">卢</div>
+            <div style="flex:1;">
+              <div style="font-weight:600;color:#333;">卢熙模</div>
+              <div style="font-size:12px;color:#aaa;margin-top:2px;">达人ID: DR23003 · 本月推广 890 次</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:18px;font-weight:700;color:#222;">¥12,680.33</div>
+              <div style="font-size:11px;color:#bbb;">团队占比 17.2%</div>
+            </div>
+          </div>
+        </div>
+        <!-- 陈良文 -->
+        <div class="member-card" onclick="showMemberDetail('陈良文')" style="cursor:pointer;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div class="avatar-box" style="background:#d94a8c;">陈</div>
+            <div style="flex:1;">
+              <div style="font-weight:600;color:#333;">陈良文</div>
+              <div style="font-size:12px;color:#aaa;margin-top:2px;">达人ID: DR23004 · 本月推广 560 次</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:18px;font-weight:700;color:#222;">¥7,512.86</div>
+              <div style="font-size:11px;color:#bbb;">团队占比 10.2%</div>
+            </div>
+          </div>
+        </div>
+        <!-- 徐毓杰 -->
+        <div class="member-card" onclick="showMemberDetail('徐毓杰')" style="cursor:pointer;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div class="avatar-box" style="background:#a050d9;">徐</div>
+            <div style="flex:1;">
+              <div style="font-weight:600;color:#333;">徐毓杰</div>
+              <div style="font-size:12px;color:#aaa;margin-top:2px;">达人ID: DR23005 · 本月推广 276 次</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:18px;font-weight:700;color:#222;">¥2,973.47</div>
+              <div style="font-size:11px;color:#bbb;">团队占比 4.1%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 收益汇总条 -->
+      <div style="padding:16px 20px;border-top:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center;background:#fafafa;border-radius:0 0 12px 12px;">
+        <span style="font-size:13px;color:#888;">👥 团队收益合计</span>
+        <div style="display:flex;gap:32px;font-size:13px;">
+          <span><span style="color:#aaa;">许锦超</span> <strong style="color:#222;">¥32,158.42</strong></span>
+          <span><span style="color:#aaa;">苏文棨</span> <strong style="color:#222;">¥18,245.60</strong></span>
+          <span><span style="color:#aaa;">卢熙模</span> <strong style="color:#222;">¥12,680.33</strong></span>
+          <span><span style="color:#aaa;">陈良文</span> <strong style="color:#222;">¥7,512.86</strong></span>
+          <span><span style="color:#aaa;">徐毓杰</span> <strong style="color:#222;">¥2,973.47</strong></span>
+          <span style="border-left:1px solid #ddd;padding-left:16px;"><span style="color:#e67e22;font-weight:700;">总计 ¥73,570.68</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 团队说明 -->
+    <div class="card" style="background:#fafafa;border-color:#eee;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <span style="font-size:24px;">📋</span>
+        <div>
+          <div style="font-weight:600;color:#555;font-size:14px;">团队管理说明</div>
+          <div style="font-size:13px;color:#999;margin-top:2px;">团队成员收益按推广贡献度自动结算，团队长可查看所有成员的收益明细与推广数据。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 新增成员弹窗 -->
+<div class="modal-overlay" id="addMemberModal">
+  <div class="modal" style="width:460px;">
+    <div class="modal-header">
+      <span>＋ 新增团队成员</span>
+      <button class="modal-close" onclick="hideModal('addMemberModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="required">真实姓名</label>
+        <input type="text" class="form-input" id="newMemberName" placeholder="请输入成员真实姓名" style="height:42px;">
+      </div>
+      <div class="form-group">
+        <label class="required">联系电话</label>
+        <input type="text" class="form-input" id="newMemberPhone" placeholder="请输入成员手机号" style="height:42px;">
+      </div>
+      <div class="form-group">
+        <label class="required">推广角色</label>
+        <select class="form-select" id="newMemberRole" style="height:42px;">
+          <option value="初级推广员">初级推广员</option>
+          <option value="推广员">推广员</option>
+          <option value="高级推广员" selected>高级推广员</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>邀请留言（选填）</label>
+        <textarea class="form-textarea" id="newMemberMsg" placeholder="给成员添加备注信息" rows="2"></textarea>
+      </div>
+      <div style="padding:12px 16px;background:#fafafa;border:1px solid #f0f0f0;font-size:13px;color:#888;margin-bottom:16px;">
+        📩 邀请将发送至成员手机，成员确认后即可加入您的推广团队。
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-lg" onclick="hideModal('addMemberModal')" style="flex:1;justify-content:center;">取消</button>
+        <button class="btn btn-primary btn-lg" onclick="addMember()" style="flex:1;justify-content:center;">发送邀请</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 成员收益详情抽屉 -->
+<div class="drawer-overlay" id="memberDetail-overlay" onclick="hideDrawer('memberDetail')"></div>
+<div class="drawer" id="memberDetail">
+  <div class="drawer-header">
+    <span style="font-size:16px;font-weight:600;" id="memberDrawerTitle">成员收益详情</span>
+    <button class="modal-close" onclick="hideDrawer('memberDetail')">✕</button>
+  </div>
+  <div class="drawer-body" id="memberDrawerBody"></div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  // ====== 成员收益明细数据 ======
+  const MEMBER_DETAILS = {
+    '许锦超': {
+      id: 'DR23001', avatar: '许', color: '#e67e22', role: '团队长',
+      total: 32158.42, shares: 1860, rate: '43.7%',
+      dramas: [
+        { name: '我的相亲系统已激活', orders: 420, commission: 15268.42, pct: '47.5%' },
+        { name: '我以狐仙镇百鬼之风水之王2', orders: 310, commission: 10895.78, pct: '33.9%' },
+        { name: '青云宗', orders: 230, commission: 5994.22, pct: '18.6%' }
+      ]
+    },
+    '苏文棨': {
+      id: 'DR23002', avatar: '苏', color: '#4a90d9', role: '高级推广员',
+      total: 18245.60, shares: 1240, rate: '24.8%',
+      dramas: [
+        { name: '我的相亲系统已激活', orders: 280, commission: 8245.60, pct: '45.2%' },
+        { name: '我以狐仙镇百鬼之风水之王2', orders: 190, commission: 6200.00, pct: '34.0%' },
+        { name: '青云宗', orders: 150, commission: 3800.00, pct: '20.8%' }
+      ]
+    },
+    '卢熙模': {
+      id: 'DR23003', avatar: '卢', color: '#50b86c', role: '推广员',
+      total: 12680.33, shares: 890, rate: '17.2%',
+      dramas: [
+        { name: '我的相亲系统已激活', orders: 180, commission: 5680.33, pct: '44.8%' },
+        { name: '我以狐仙镇百鬼之风水之王2', orders: 120, commission: 4200.00, pct: '33.1%' },
+        { name: '青云宗', orders: 90, commission: 2800.00, pct: '22.1%' }
+      ]
+    },
+    '陈良文': {
+      id: 'DR23004', avatar: '陈', color: '#d94a8c', role: '推广员',
+      total: 7512.86, shares: 560, rate: '10.2%',
+      dramas: [
+        { name: '我的相亲系统已激活', orders: 110, commission: 3512.86, pct: '46.8%' },
+        { name: '我以狐仙镇百鬼之风水之王2', orders: 80, commission: 2500.00, pct: '33.3%' },
+        { name: '青云宗', orders: 60, commission: 1500.00, pct: '19.9%' }
+      ]
+    },
+    '徐毓杰': {
+      id: 'DR23005', avatar: '徐', color: '#a050d9', role: '初级推广员',
+      total: 2973.47, shares: 276, rate: '4.1%',
+      dramas: [
+        { name: '我的相亲系统已激活', orders: 50, commission: 1473.47, pct: '49.5%' },
+        { name: '我以狐仙镇百鬼之风水之王2', orders: 35, commission: 1000.00, pct: '33.6%' },
+        { name: '青云宗', orders: 20, commission: 500.00, pct: '16.9%' }
+      ]
+    }
+  };
+
+  function showMemberDetail(name) {
+    const d = MEMBER_DETAILS[name];
+    if (!d) return;
+    document.getElementById('memberDrawerTitle').textContent = name + ' 的收益详情';
+    document.getElementById('memberDrawerBody').innerHTML = `
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+        <div style="width:48px;height:48px;border-radius:50%;background:${d.color};display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:600;color:#fff;">${d.avatar}</div>
+        <div>
+          <div style="font-size:18px;font-weight:600;color:#1a1a2e;">${name} <span style="font-size:12px;color:#e67e22;font-weight:500;">（${d.role}）</span></div>
+          <div style="font-size:12px;color:#aaa;margin-top:2px;">达人ID: ${d.id} · 本月推广 ${d.shares} 次 · 团队占比 ${d.rate}</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px;">
+        <div style="text-align:center;padding:14px;background:#fafafa;border:1px solid #f0f0f0;border-radius:8px;">
+          <div style="font-size:11px;color:#aaa;">总收益</div>
+          <div style="font-size:20px;font-weight:700;color:#222;margin-top:2px;">¥${d.total.toFixed(2)}</div>
+        </div>
+        <div style="text-align:center;padding:14px;background:#fafafa;border:1px solid #f0f0f0;border-radius:8px;">
+          <div style="font-size:11px;color:#aaa;">推广次数</div>
+          <div style="font-size:20px;font-weight:700;color:#222;margin-top:2px;">${d.shares}</div>
+        </div>
+        <div style="text-align:center;padding:14px;background:#fafafa;border:1px solid #f0f0f0;border-radius:8px;">
+          <div style="font-size:11px;color:#aaa;">订单数</div>
+          <div style="font-size:20px;font-weight:700;color:#222;margin-top:2px;">${d.dramas.reduce((s, x) => s + x.orders, 0)}</div>
+        </div>
+      </div>
+
+      <div style="font-weight:600;color:#555;font-size:14px;margin-bottom:12px;">📋 推广剧目收益明细</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>剧目</th><th>订单数</th><th>佣金收益</th><th>占比</th></tr>
+          </thead>
+          <tbody>
+            ${d.dramas.map(x => `
+              <tr><td>${x.name}</td><td>${x.orders}</td><td style="font-weight:600;">¥${x.commission.toFixed(2)}</td><td style="color:#888;">${x.pct}</td></tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:16px;padding:14px;background:#fafafa;border:1px solid #f0f0f0;border-radius:8px;display:flex;justify-content:space-between;font-size:13px;">
+        <span style="color:#888;">${name} 本月总收益</span>
+        <span style="font-weight:700;color:#222;">¥${d.total.toFixed(2)}</span>
+      </div>
+    `;
+    showDrawer('memberDetail');
+  }
+
+  function addMember() {
+    const name = document.getElementById('newMemberName').value.trim();
+    const phone = document.getElementById('newMemberPhone').value.trim();
+    if (!name) { showToast('请输入成员姓名', 'error'); return; }
+    if (!phone || phone.length < 11) { showToast('请输入正确的手机号', 'error'); return; }
+    hideModal('addMemberModal');
+    document.getElementById('newMemberName').value = '';
+    document.getElementById('newMemberPhone').value = '';
+    document.getElementById('newMemberMsg').value = '';
+    showToast('邀请已发送至 ' + phone + '，等待成员确认加入', 'success');
+  }
+</script></body>
+</html>

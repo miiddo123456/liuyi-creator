@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>推广剧目 - 六翼剧场创作者后台</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">六翼剧场创作者后台</div>
+  <nav class="sidebar-menu">
+    <a class="menu-single" href="dashboard.html">工作台</a>
+
+    <div class="menu-category" onclick="toggleMenu(this)">
+      收益管理 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="revenue-list.html">收益明细</a>
+      <a class="sub-item" href="revenue-withdraw.html">提现</a>
+      <a class="sub-item" href="revenue-settlement.html">结算记录</a>
+    </div>
+
+    <div class="menu-category" onclick="toggleMenu(this)">
+      我的推广 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item active" href="promotion-dramas.html">推广剧目</a>
+      <a class="sub-item" href="promotion-data.html">推广数据</a>
+      <a class="sub-item" href="promotion-team.html">推广团队</a>
+    </div>
+
+    <div class="menu-category" onclick="toggleMenu(this)">
+      账户中心 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="account-real-name.html">实名认证</a>
+      <a class="sub-item" href="account-payment.html">收款账户</a>
+      <a class="sub-item" href="account-security.html">安全设置</a>
+      <a class="sub-item" href="account-profile.html">个人资料</a>
+    </div>
+  </nav>
+</aside>
+
+<div class="main">
+  <header class="header">
+    <div class="header-left"><span>🎬 推广剧目</span></div>
+    <div class="header-right">
+      <div class="user-info" onclick="event.stopPropagation();toggleUserMenu(event)" style="cursor:pointer;position:relative;">
+        <div class="avatar" style="cursor:pointer;">许</div>
+        <div style="display:flex;flex-direction:column;"><div style="font-weight:500;font-size:14px;color:#444;">许锦超</div><div style="font-size:12px;color:#aaa;">达人ID: DR23001</div></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <!-- 筛选 -->
+    <div class="filter-bar">
+      <div class="filter-item">
+        <label>分类：</label>
+        <select class="form-select">
+          <option>全部剧目</option>
+          <option>都市情感</option>
+          <option>玄幻仙侠</option>
+          <option>穿越重生</option>
+          <option>悬疑推理</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label>排序：</label>
+        <select class="form-select">
+          <option>默认排序</option>
+          <option>佣金比例最高</option>
+          <option>最新上线</option>
+          <option>最热推广</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 自制短剧 -->
+    <div style="margin-top:32px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <span style="font-size:16px;font-weight:600;color:#333;">🎬 我的自制短剧</span>
+        <span style="font-size:12px;color:#aaa;">自己创作或参与出品的短剧，佣金比例更高</span>
+      </div>
+      <div class="drama-grid">
+        <div class="drama-card" onclick="showDramaDetail('我的相亲系统已激活')">
+          <div class="cover" style="background-image:url('cover1.jpg');background-size:cover;background-position:center;">
+            <div class="cover-title">我的相亲系统已激活</div>
+            <span class="hot-tag tag tag-info" style="background:#e67e22;color:#fff;font-size:10px;">💰 佣金70%</span>
+          </div>
+          <div class="drama-info">
+            <div class="title">我的相亲系统已激活</div>
+            <div style="display:flex;align-items:center;gap:4px;margin:2px 0;">
+              <span style="font-size:10px;color:#e67e22;">★★★★★</span>
+              <span style="font-size:11px;color:#e67e22;font-weight:600;">8.9</span>
+              <span style="font-size:11px;color:#ddd;">|</span>
+              <span style="font-size:11px;color:#e67e22;">🔥 热度 98%</span>
+            </div>
+            <div class="meta">自制 · 佣金 70% · 已推广 1,250 次</div>
+          </div>
+        </div>
+        <div class="drama-card" onclick="showDramaDetail('我以狐仙镇百鬼之风水之王2')">
+          <div class="cover" style="background-image:url('cover2.jpg');background-size:cover;background-position:center;">
+            <div class="cover-title">我以狐仙镇百鬼之风水之王2</div>
+            <span class="hot-tag tag tag-info" style="background:#e67e22;color:#fff;font-size:10px;">💰 佣金70%</span>
+          </div>
+          <div class="drama-info">
+            <div class="title">我以狐仙镇百鬼之风水之王2</div>
+            <div style="display:flex;align-items:center;gap:4px;margin:2px 0;">
+              <span style="font-size:10px;color:#e67e22;">★★★★★</span>
+              <span style="font-size:11px;color:#e67e22;font-weight:600;">9.2</span>
+              <span style="font-size:11px;color:#ddd;">|</span>
+              <span style="font-size:11px;color:#e67e22;">🔥 热度 96%</span>
+            </div>
+            <div class="meta">自制 · 佣金 70% · 已推广 980 次</div>
+          </div>
+        </div>
+        <div class="drama-card" onclick="showDramaDetail('青云宗')">
+          <div class="cover" style="background-image:url('cover3.jpg');background-size:cover;background-position:center;">
+            <div class="cover-title">青云宗</div>
+            <span class="hot-tag tag tag-info" style="background:#e67e22;color:#fff;font-size:10px;">💰 佣金70%</span>
+          </div>
+          <div class="drama-info">
+            <div class="title">青云宗</div>
+            <div style="display:flex;align-items:center;gap:4px;margin:2px 0;">
+              <span style="font-size:10px;color:#e67e22;">★★★★☆</span>
+              <span style="font-size:11px;color:#e67e22;font-weight:600;">8.5</span>
+              <span style="font-size:11px;color:#ddd;">|</span>
+              <span style="font-size:11px;color:#e67e22;">🔥 热度 92%</span>
+            </div>
+            <div class="meta">自制 · 佣金 70% · 已推广 720 次</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 剧目详情抽屉 -->
+<div class="drawer-overlay" id="dramaDetail-overlay" onclick="hideDrawer('dramaDetail')"></div>
+<div class="drawer" id="dramaDetail">
+  <div class="drawer-header">
+    <span style="font-size:16px;font-weight:600;" id="dramaDetailTitle">剧目详情</span>
+    <button class="modal-close" onclick="hideDrawer('dramaDetail')">✕</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  // ====== 自制短剧数据 ======
+  const DRAMA_DB = {
+  '我的相亲系统已激活': {
+    cover: 'cover1.jpg',
+    gradient: 'linear-gradient(160deg,#1a0a00,#5c2e00 40%,#e67e22)',
+    tags: '都市 · 喜剧 · 逆袭 · 自制出品', episodes: '50集', year: '2026上线',
+    desc: '独家自制都市喜剧短剧。普通青年通过一系列奇葩相亲经历，阴差阳错走上人生巅峰。笑点密集，轻松解压，转化率持续走高。',
+    link: 'https://ai-drama.com/p/DR23001/DR009', dramaId: 'DR009',
+    shares: 1250, orders: 420, commission: 35268.42 },
+  '我以狐仙镇百鬼之风水之王2': {
+    cover: 'cover2.jpg',
+    gradient: 'linear-gradient(160deg,#2c0a1a,#6b1b3a 40%,#d4a574)',
+    tags: '玄幻 · 仙妖 · 甜宠 · 自制出品', episodes: '60集', year: '2026上线',
+    desc: '独家自制玄幻甜宠短剧。平凡少年偶遇狐仙，从此开启一段跨越人妖界限的奇幻爱恋。精致特效+甜蜜剧情，女性用户占比87%。',
+    link: 'https://ai-drama.com/p/DR23001/DR010', dramaId: 'DR010',
+    shares: 980, orders: 310, commission: 24895.78 },
+  '青云宗': {
+    cover: 'cover3.jpg',
+    gradient: 'linear-gradient(160deg,#0a0a0a,#1a3a1a 40%,#f39c12)',
+    tags: '仙侠 · 宗门 · 热血 · 自制出品', episodes: '70集', year: '2026上线',
+    desc: '独家自制仙侠热血短剧。少年拜入青云宗，从杂役弟子一步步崛起，在宗门大比中一鸣惊人。宏大世界观+热血剧情，男性用户转化率领先。',
+    link: 'https://ai-drama.com/p/DR23001/DR011', dramaId: 'DR011',
+    shares: 720, orders: 230, commission: 18312.56 }
+};
+
+function toggleChannel(el) {
+  const active = el.style.background === 'rgb(230, 126, 34)';
+  if (active) {
+    el.style.background = '#fff';
+    el.style.color = '#888';
+    el.style.borderColor = '#e0e0e0';
+    el.textContent = el.textContent.replace(' ✓', '');
+  } else {
+    el.style.background = '#e67e22';
+    el.style.color = '#fff';
+    el.style.borderColor = '#e67e22';
+    el.textContent = el.textContent + ' ✓';
+  }
+}
+
+function showDramaDetail(title) {
+  const d = DRAMA_DB[title];
+  if (!d) return;
+  document.getElementById('dramaDetailTitle').textContent = title;
+  document.getElementById('drawerBody').innerHTML = `
+    <div style="height:200px;background-image:url('${d.cover}');background-size:cover;background-position:center;border-radius:10px;display:flex;align-items:flex-end;padding:20px;margin-bottom:16px;position:relative;">
+      <div style="color:#fff;font-size:20px;font-weight:700;text-shadow:0 2px 8px rgba(0,0,0,.5);position:relative;z-index:2;">${title}</div>
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.7) 100%);border-radius:10px;"></div>
+    </div>
+    <div style="font-size:13px;color:#999;margin-bottom:4px;">${d.tags} | ${d.episodes} | ${d.year}</div>
+    <div style="margin:12px 0 16px;font-size:14px;line-height:1.8;color:#666;">${d.desc}</div>
+    <div class="card" style="padding:16px;">
+      <div class="card-header" style="margin-bottom:8px;font-size:14px;">🔗 专属推广链接</div>
+      <div style="display:flex;gap:8px;">
+        <input class="form-input" value="${d.link}" readonly style="flex:1;background:#f5f5f5;">
+        <button class="btn btn-primary" onclick="copyText('${d.link}','推广链接已复制')">复制</button>
+      </div>
+    </div>
+    <div class="card" style="padding:16px;">
+      <div class="card-header" style="margin-bottom:8px;font-size:14px;">🖼️ 推广海报</div>
+      <div style="display:flex;gap:12px;margin-bottom:12px;">
+        <div style="width:80px;height:120px;border-radius:6px;cursor:pointer;border:2px solid #e67e22;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:#fff;background-image:url('${d.cover}');background-size:cover;background-position:center;font-weight:600;">模板A<div style="font-size:9px;font-weight:400;margin-top:4px;opacity:.7;">竖版</div></div>
+        <div style="width:80px;height:120px;border-radius:6px;cursor:pointer;border:2px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:#fff;background:linear-gradient(160deg,#0a1628,#1a3a6b 50%,#5dade2);font-weight:600;">模板B<div style="font-size:9px;font-weight:400;margin-top:4px;opacity:.7;">情感</div></div>
+        <div style="width:80px;height:120px;border-radius:6px;cursor:pointer;border:2px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:#fff;background:linear-gradient(160deg,#0a0a0a,#1a3a1a 50%,#f39c12);font-weight:600;">模板C<div style="font-size:9px;font-weight:400;margin-top:4px;opacity:.7;">热血</div></div>
+      </div>
+      <button class="btn btn-success btn-sm" onclick="showToast('海报生成中，请稍候下载','success')">生成海报</button>
+    </div>
+    <div class="card" style="padding:16px;">
+      <div class="card-header" style="margin-bottom:10px;font-size:14px;">📡 推广渠道</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;" id="channelList">
+        <span onclick="toggleChannel(this)" style="padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid #e67e22;background:#e67e22;color:#fff;font-weight:500;transition:all .15s;">红果短剧 ✓</span>
+        <span onclick="toggleChannel(this)" style="padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid #e0e0e0;background:#fff;color:#888;transition:all .15s;">河马剧场</span>
+        <span onclick="toggleChannel(this)" style="padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid #e0e0e0;background:#fff;color:#888;transition:all .15s;">抖音短剧</span>
+        <span onclick="toggleChannel(this)" style="padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid #e0e0e0;background:#fff;color:#888;transition:all .15s;">快手短剧</span>
+        <span onclick="toggleChannel(this)" style="padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid #e0e0e0;background:#fff;color:#888;transition:all .15s;">微信视频号</span>
+        <span onclick="toggleChannel(this)" style="padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid #e0e0e0;background:#fff;color:#888;transition:all .15s;">爱奇艺随刻</span>
+        <span onclick="toggleChannel(this)" style="padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid #e0e0e0;background:#fff;color:#888;transition:all .15s;">腾讯微视</span>
+        <span onclick="toggleChannel(this)" style="padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid #e0e0e0;background:#fff;color:#888;transition:all .15s;">百度好看</span>
+      </div>
+    </div>
+    <div class="card" style="padding:16px;">
+      <div class="card-header" style="margin-bottom:8px;font-size:14px;">📊 我的推广数据</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+        <div style="text-align:center;padding:12px;background:#fafafa;border-radius:6px;">
+          <div style="font-size:24px;font-weight:600;color:#333;">${d.shares.toLocaleString()}</div>
+          <div style="font-size:12px;color:#999;">分享次数</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:#fafafa;border-radius:6px;">
+          <div style="font-size:24px;font-weight:600;color:#444;">${d.orders}</div>
+          <div style="font-size:12px;color:#999;">付费订单数</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:#fafafa;border-radius:6px;">
+          <div style="font-size:24px;font-weight:600;color:#333;">¥${d.commission.toLocaleString()}</div>
+          <div style="font-size:12px;color:#999;">总佣金</div>
+        </div>
+      </div>
+    </div>`;
+  showDrawer('dramaDetail');
+}
+</script>
+</body>
+</html>

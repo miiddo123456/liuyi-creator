@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>达人工作台 - 六翼剧场创作者后台</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .stat-summary { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+    .stat-summary .trend-up { color: #e67e22; font-size: 12px; }
+    .stat-summary .trend-neutral { color: #bbb; font-size: 12px; }
+    .entry-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .entry-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border: 1px solid #f0f0f0; border-radius: 10px; cursor: pointer; transition: all .2s; background: #fcfcfc; }
+    .entry-item:hover { border-color: #e67e22; background: #fef5e7; transform: translateY(-1px); }
+    .entry-item:active { transform: translateY(0); }
+    .entry-item .icon { font-size: 22px; width: 36px; text-align: center; }
+    .entry-item .info { flex: 1; }
+    .entry-item .info .name { font-size: 13px; font-weight: 500; color: #444; }
+    .entry-item .info .desc { font-size: 11px; color: #aaa; margin-top: 1px; }
+    .feed-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f5f5f5; cursor: pointer; transition: all .15s; }
+    .feed-item:last-child { border-bottom: none; }
+    .feed-item:hover { margin: 0 -16px; padding: 12px 16px; background: #fef9f4; border-radius: 8px; border-bottom-color: transparent; }
+    .feed-item .icon-box { width: 36px; height: 36px; border-radius: 8px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .feed-item .mid { flex: 1; min-width: 0; }
+    .feed-item .mid .drama { font-size: 13px; font-weight: 500; color: #1a1a2e; }
+    .feed-item .mid .time { font-size: 11px; color: #bbb; margin-top: 1px; }
+    .feed-item .right { text-align: right; flex-shrink: 0; }
+    .feed-item .right .amount { font-size: 15px; font-weight: 600; color: #222; }
+    .metric-card { padding: 18px; border: 1px solid #f0f0f0; border-radius: 10px; text-align: center; background: #fcfcfc; }
+    .metric-card .label { font-size: 11px; color: #aaa; letter-spacing: .5px; margin-bottom: 6px; }
+    .metric-card .value { font-size: 24px; font-weight: 700; color: #1a1a2e; letter-spacing: -.5px; }
+    .metric-card .change { font-size: 11px; color: #bbb; margin-top: 4px; }
+    .summary-bar { display: flex; gap: 12px; margin-bottom: 16px; }
+    .summary-item { flex: 1; padding: 14px 20px; border: 1px solid #ebebeb; border-radius: 10px; display: flex; flex-direction: column; background: #fff; }
+    .summary-item .lbl { font-size: 12px; color: #aaa; letter-spacing: .3px; }
+    .summary-item .val { font-size: 20px; font-weight: 700; color: #1a1a2e; margin-top: 4px; letter-spacing: -.3px; }
+  </style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">六翼剧场创作者后台</div>
+  <nav class="sidebar-menu">
+    <a class="menu-single active" href="dashboard.html">工作台</a>
+    <div class="menu-category" onclick="toggleMenu(this)">
+      收益管理 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="revenue-list.html">收益明细</a>
+      <a class="sub-item" href="revenue-withdraw.html">提现</a>
+      <a class="sub-item" href="revenue-settlement.html">结算记录</a>
+    </div>
+    <div class="menu-category" onclick="toggleMenu(this)">
+      我的推广 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="promotion-dramas.html">推广剧目</a>
+      <a class="sub-item" href="promotion-data.html">推广数据</a>
+      <a class="sub-item" href="promotion-team.html">推广团队</a>
+    </div>
+    <div class="menu-category" onclick="toggleMenu(this)">
+      账户中心 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="account-real-name.html">实名认证</a>
+      <a class="sub-item" href="account-payment.html">收款账户</a>
+      <a class="sub-item" href="account-security.html">安全设置</a>
+      <a class="sub-item" href="account-profile.html">个人资料</a>
+    </div>
+  </nav>
+</aside>
+
+<div class="main">
+  <header class="header">
+    <div class="header-left">📊 达人工作台</div>
+    <div class="header-right">
+      <div class="user-info" onclick="event.stopPropagation();toggleUserMenu(event)" style="cursor:pointer;position:relative;">
+        <div class="avatar" style="cursor:pointer;">许</div>
+        <div style="display:flex;flex-direction:column;">
+          <div style="font-weight:600;font-size:14px;color:#333;">许锦超</div>
+          <div style="font-size:12px;color:#aaa;">达人ID: DR23001</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <!-- 个人信息卡片 -->
+    <div class="user-profile-card">
+      <div class="avatar-lg" onclick="location.href='account-profile.html'" style="cursor:pointer;">许</div>
+      <div class="user-meta">
+        <div class="name">许锦超</div>
+        <div class="id">
+          达人ID：DR23001 &nbsp;·&nbsp;
+          实名状态：<span class="tag tag-success" onclick="location.href='account-real-name.html'" style="cursor:pointer;">已认证</span>
+          &nbsp;·&nbsp; 绑定：<span onclick="location.href='account-payment.html'" style="cursor:pointer;color:#888;">招商银行 · 支付宝</span>
+        </div>
+      </div>
+      <div class="user-stats">
+        <div class="stat-item"><div class="num">1,286</div><div class="lbl">推广用户</div></div>
+        <div class="stat-item"><div class="num">32</div><div class="lbl">推广剧目</div></div>
+        <div class="stat-item"><div class="num">6.2%</div><div class="lbl">转化率</div></div>
+      </div>
+    </div>
+
+    <!-- 核心数据 -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;">
+      <div class="stat-card" onclick="location.href='revenue-list.html'">
+        <div class="label">今日预估收入</div>
+        <div class="value">¥368.50</div>
+        <div class="stat-summary"><span class="trend-up">↑ 12.5%</span><span class="trend-neutral">较昨日</span></div>
+      </div>
+      <div class="stat-card" onclick="location.href='revenue-list.html'">
+        <div class="label">本月累计收入</div>
+        <div class="value">¥8,926.30</div>
+        <div style="margin-top:8px;display:flex;align-items:center;gap:8px;">
+          <div style="flex:1;height:4px;background:#eee;border-radius:2px;overflow:hidden;">
+            <div style="height:100%;width:59.5%;background:linear-gradient(90deg,#e67e22,#f5a623);border-radius:2px;"></div>
+          </div>
+          <span style="font-size:11px;color:#aaa;">59.5%</span>
+        </div>
+      </div>
+      <div class="stat-card" onclick="location.href='revenue-withdraw.html'">
+        <div class="label">可提现余额</div>
+        <div class="value">¥3,250.00</div>
+        <div style="margin-top:6px;font-size:12px;color:#bbb;">已结算待提现 · <a href="revenue-withdraw.html" style="color:#e67e22;">去提现 →</a></div>
+      </div>
+      <div class="stat-card" onclick="location.href='promotion-data.html'">
+        <div class="label">累计推广用户</div>
+        <div class="value">1,286</div>
+        <div class="stat-summary"><span class="trend-up">↑ 23</span><span class="trend-neutral">今日新增</span></div>
+      </div>
+    </div>
+
+    <!-- 中间区域：趋势 + 快捷入口 -->
+    <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:16px;margin-bottom:16px;">
+      <!-- 收益趋势 -->
+      <div class="card">
+        <div class="card-header">
+          <span>收益趋势</span>
+          <div class="tabs" style="margin:0;">
+            <span class="tab active" onclick="switchTrend(this,'7d')">近7天</span>
+            <span class="tab" onclick="switchTrend(this,'30d')">近30天</span>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-bars" id="chartBars"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:16px;padding-top:12px;border-top:1px solid #f5f5f5;font-size:12px;color:#aaa;">
+          <span>最高 <strong style="color:#e67e22;" id="statMax">¥410.00</strong></span>
+          <span>日均 <strong style="color:#333;" id="statAvg">¥344.14</strong></span>
+          <span>合计 <strong style="color:#333;" id="statTotal">¥2,409.00</strong></span>
+        </div>
+      </div>
+
+      <!-- 快捷入口 -->
+      <div class="card">
+        <div class="card-header">快捷入口</div>
+        <div class="entry-grid">
+          <div class="entry-item" onclick="location.href='promotion-dramas.html'">
+            <div class="icon">📢</div>
+            <div class="info"><div class="name">推广中心</div><div class="desc">管理推广剧目</div></div>
+          </div>
+          <div class="entry-item" onclick="location.href='revenue-list.html'">
+            <div class="icon">📋</div>
+            <div class="info"><div class="name">收益明细</div><div class="desc">查看收益流水</div></div>
+          </div>
+          <div class="entry-item" onclick="location.href='revenue-withdraw.html'">
+            <div class="icon">💳</div>
+            <div class="info"><div class="name">提现</div><div class="desc" style="color:#e67e22;">可提 ¥3,250</div></div>
+          </div>
+          <div class="entry-item" onclick="location.href='account-real-name.html'">
+            <div class="icon">🪪</div>
+            <div class="info"><div class="name">实名认证</div><div class="desc" style="color:#888;">已认证 ✓</div></div>
+          </div>
+          <div class="entry-item" onclick="location.href='revenue-settlement.html'">
+            <div class="icon">📑</div>
+            <div class="info"><div class="name">结算记录</div><div class="desc">月度结算账单</div></div>
+          </div>
+          <div class="entry-item" onclick="location.href='promotion-data.html'">
+            <div class="icon">📈</div>
+            <div class="info"><div class="name">推广数据</div><div class="desc">转化效果分析</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部：收益动态 + 推广速览 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <!-- 收益动态 -->
+      <div class="card" style="padding:0;">
+        <div class="card-header" style="padding:16px 20px;margin:0;border-bottom:1px solid #f0f0f0;">
+          <span>📄 最新收益动态</span>
+          <a href="revenue-list.html" style="font-size:12px;color:#888;">查看全部 →</a>
+        </div>
+        <div style="padding:0 16px;">
+          <div class="feed-item" onclick="location.href='revenue-list.html'">
+            <div class="icon-box">🎬</div>
+            <div class="mid"><div class="drama">盛夏芬德拉</div><div class="time">2026-06-11 14:32</div></div>
+            <div class="right"><div class="amount">+¥86.50</div><span class="tag tag-success" style="font-size:10px;">已结算</span></div>
+          </div>
+          <div class="feed-item" onclick="location.href='revenue-list.html'">
+            <div class="icon-box">🎬</div>
+            <div class="mid"><div class="drama">好一个乖乖女</div><div class="time">2026-06-11 11:20</div></div>
+            <div class="right"><div class="amount">+¥45.00</div><span class="tag tag-default" style="font-size:10px;">待结算</span></div>
+          </div>
+          <div class="feed-item" onclick="location.href='revenue-list.html'">
+            <div class="icon-box">🎬</div>
+            <div class="mid"><div class="drama">家里家外2</div><div class="time">2026-06-10 22:15</div></div>
+            <div class="right"><div class="amount">+¥128.00</div><span class="tag tag-success" style="font-size:10px;">已结算</span></div>
+          </div>
+          <div class="feed-item" onclick="location.href='revenue-list.html'">
+            <div class="icon-box">🎬</div>
+            <div class="mid"><div class="drama">一品布衣2</div><div class="time">2026-06-10 18:42</div></div>
+            <div class="right"><div class="amount">+¥66.80</div><span class="tag tag-success" style="font-size:10px;">已结算</span></div>
+          </div>
+          <div class="feed-item" onclick="location.href='revenue-list.html'" style="border-bottom:none;">
+            <div class="icon-box">🎁</div>
+            <div class="mid"><div class="drama">活动奖励</div><div class="time">2026-06-09 09:30</div></div>
+            <div class="right"><div class="amount">+¥10.00</div><span class="tag tag-success" style="font-size:10px;">已结算</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 推广速览 -->
+      <div class="card">
+        <div class="card-header">
+          <span>📊 推广速览</span>
+          <a href="promotion-data.html" style="font-size:12px;color:#888;">查看详情 →</a>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div class="metric-card">
+            <div class="label">今日推广次数</div>
+            <div class="value">268</div>
+            <div class="change">较昨日 <strong style="color:#e67e22;">+8.5%</strong></div>
+          </div>
+          <div class="metric-card">
+            <div class="label">今日新增用户</div>
+            <div class="value">23</div>
+            <div class="change">较昨日 <strong style="color:#e67e22;">+15%</strong></div>
+          </div>
+          <div class="metric-card">
+            <div class="label">热门剧目</div>
+            <div style="font-size:15px;font-weight:600;color:#1a1a2e;margin:4px 0;">盛夏芬德拉</div>
+            <div class="change">佣金 55% · 🔥 44亿播放</div>
+          </div>
+          <div class="metric-card">
+            <div class="label">待处理提现</div>
+            <div class="value">1</div>
+            <div class="change">¥3,000.00 审核中</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  const trendData7d = [285, 320, 298, 410, 386, 342, 368];
+  const trendData30d = [210, 235, 198, 256, 285, 310, 298, 275, 320, 340, 310, 295, 330, 358, 325, 340, 368, 385, 360, 342, 320, 310, 335, 350, 380, 365, 342, 390, 410, 368];
+  const labels7d = ['06-05','06-06','06-07','06-08','06-09','06-10','06-11'];
+  const labels30d = [];
+
+  function renderChart(data, labels) {
+    const container = document.getElementById('chartBars');
+    if (!container) return;
+    const max = Math.max(...data);
+    const count = data.length;
+    const total = data.reduce((s, v) => s + v, 0);
+    const avg = total / count;
+
+    // 更新统计指标
+    document.getElementById('statMax').textContent = '¥' + max.toFixed(2);
+    document.getElementById('statAvg').textContent = '¥' + avg.toFixed(2);
+    document.getElementById('statTotal').textContent = '¥' + total.toFixed(2);
+
+    // 动态调整柱宽：超过10条时缩小柱子
+    const barWidth = count > 10 ? 14 : 28;
+    const gapSize = count > 10 ? 3 : 6;
+
+    container.style.gap = gapSize + 'px';
+    container.style.justifyContent = 'space-between';
+    container.innerHTML = data.map((v, i) =>
+      `<div class="chart-bar" style="height:${max > 0 ? (v/max*100) : 0}%;width:${barWidth}px;${count > 10 ? 'min-width:'+barWidth+'px;' : ''}" title="${labels[i]}: ¥${v.toFixed(2)}">
+        <span class="bar-val">¥${v}</span>
+        <span class="bar-label">${labels[i]}</span>
+      </div>`
+    ).join('');
+  }
+
+  renderChart(trendData7d, labels7d);
+
+  function switchTrend(el, period) {
+    document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    if (period === '7d') renderChart(trendData7d, labels7d);
+    else {
+      if (labels30d.length === 0) {
+        for (let i = 29; i >= 0; i--) {
+          const d = new Date('2026-06-11');
+          d.setDate(d.getDate() - i);
+          labels30d.push(`${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);
+        }
+      }
+      renderChart(trendData30d, labels30d);
+    }
+  }
+</script>
+</body>
+</html>

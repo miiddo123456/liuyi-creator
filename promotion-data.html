@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>推广数据 - 六翼剧场创作者后台</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">六翼剧场创作者后台</div>
+  <nav class="sidebar-menu">
+    <a class="menu-single" href="dashboard.html">工作台</a>
+
+    <div class="menu-category" onclick="toggleMenu(this)">
+      收益管理 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="revenue-list.html">收益明细</a>
+      <a class="sub-item" href="revenue-withdraw.html">提现</a>
+      <a class="sub-item" href="revenue-settlement.html">结算记录</a>
+    </div>
+
+    <div class="menu-category" onclick="toggleMenu(this)">
+      我的推广 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="promotion-dramas.html">推广剧目</a>
+      <a class="sub-item active" href="promotion-data.html">推广数据</a>
+      <a class="sub-item" href="promotion-team.html">推广团队</a>
+    </div>
+
+    <div class="menu-category" onclick="toggleMenu(this)">
+      账户中心 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="account-real-name.html">实名认证</a>
+      <a class="sub-item" href="account-payment.html">收款账户</a>
+      <a class="sub-item" href="account-security.html">安全设置</a>
+      <a class="sub-item" href="account-profile.html">个人资料</a>
+    </div>
+  </nav>
+</aside>
+
+<div class="main">
+  <header class="header">
+    <div class="header-left"><span>📈 推广数据</span></div>
+    <div class="header-right">
+      <div class="user-info" onclick="event.stopPropagation();toggleUserMenu(event)" style="cursor:pointer;position:relative;">
+        <div class="avatar" style="cursor:pointer;">许</div>
+        <div style="display:flex;flex-direction:column;">
+          <div style="font-weight:500;font-size:14px;color:#444;">许锦超</div>
+          <div style="font-size:12px;color:#aaa;">达人ID: DR23001</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <!-- 筛选 -->
+    <div class="filter-bar">
+      <div class="filter-item">
+        <label>推广剧目：</label>
+        <select class="form-select">
+          <option>全部剧目</option>
+          <option>重生之都市仙尊</option>
+          <option>闪婚后大佬他后悔了</option>
+          <option>我的冰山总裁老婆</option>
+          <option>系统觉醒：我主宰万物</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label>时间范围：</label>
+        <input type="date" class="form-input" value="2026-05-11">
+        <span style="color:#999;">—</span>
+        <input type="date" class="form-input" value="2026-06-11">
+      </div>
+      <button class="btn btn-primary" onclick="showToast('已更新数据','success')">查询</button>
+    </div>
+
+    <!-- 核心指标卡片 -->
+    <div class="card-grid" style="grid-template-columns:repeat(4,1fr);">
+      <div class="stat-card">
+        <div class="label">推广次数</div>
+        <div class="value blue">5,268</div>
+        <div class="sub">分享链接点击次数</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">点击人数（UV）</div>
+        <div class="value">1,286</div>
+        <div class="sub">独立访客数</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">付费转化率</div>
+        <div class="value green">11.2%</div>
+        <div class="sub">付费用户/点击用户</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">佣金收入</div>
+        <div class="value gold">¥8,926.30</div>
+        <div class="sub">当月累计佣金</div>
+      </div>
+    </div>
+
+    <!-- 趋势图 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="card">
+        <div class="card-header">每日点击量趋势</div>
+        <div class="chart-wrap" style="height:180px;">
+          <div class="chart-bars" id="clickChart"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">每日付费量趋势</div>
+        <div class="chart-wrap" style="height:180px;">
+          <div class="chart-bars" id="payChart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 转化明细表格 -->
+    <div class="card" style="margin-top:16px;">
+      <div class="card-header">
+        <span>转化明细</span>
+        <span class="text-muted" style="font-size:13px;">点击佣金金额可查看对应收益明细</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>时间</th><th>用户标识</th><th>事件</th>
+              <th>来源剧目</th><th>付费金额</th><th>佣金金额</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>2026-06-11 14:32</td><td>a1b2c***d3e4f</td>
+              <td><span class="tag tag-warning">付费</span></td>
+              <td>重生之都市仙尊</td><td>¥173.00</td>
+              <td><a class="btn-link" href="revenue-list.html">¥86.50</a></td>
+            </tr>
+            <tr>
+              <td>2026-06-11 14:28</td><td>a1b2c***d3e4f</td>
+              <td><span class="tag tag-info">点击</span></td>
+              <td>重生之都市仙尊</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td>2026-06-11 11:20</td><td>f5g6h***i7j8k</td>
+              <td><span class="tag tag-warning">付费</span></td>
+              <td>闪婚后大佬他后悔了</td><td>¥90.00</td>
+              <td><a class="btn-link" href="revenue-list.html">¥45.00</a></td>
+            </tr>
+            <tr>
+              <td>2026-06-11 11:15</td><td>f5g6h***i7j8k</td>
+              <td><span class="tag tag-info">点击</span></td>
+              <td>闪婚后大佬他后悔了</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td>2026-06-11 11:12</td><td>f5g6h***i7j8k</td>
+              <td><span class="tag tag-default">注册</span></td>
+              <td>闪婚后大佬他后悔了</td><td>—</td><td>—</td>
+            </tr>
+            <tr>
+              <td>2026-06-10 22:15</td><td>l9m0n***p1q2r</td>
+              <td><span class="tag tag-warning">付费</span></td>
+              <td>我的冰山总裁老婆</td><td>¥256.00</td>
+              <td><a class="btn-link" href="revenue-list.html">¥128.00</a></td>
+            </tr>
+            <tr>
+              <td>2026-06-10 18:42</td><td>s3t4u***v5w6x</td>
+              <td><span class="tag tag-warning">付费</span></td>
+              <td>系统觉醒：我主宰万物</td><td>¥133.60</td>
+              <td><a class="btn-link" href="revenue-list.html">¥66.80</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <span class="page-info">共 156 条</span>
+        <button class="page-btn" disabled>‹</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn" onclick="showToast('切换到第2页','info')">2</button>
+        <button class="page-btn" onclick="showToast('切换到第3页','info')">3</button>
+        <button class="page-btn" onclick="showToast('切换到第4页','info')">4</button>
+        <button class="page-btn" onclick="showToast('切换到第5页','info')">5</button>
+        <button class="page-btn" onclick="showToast('切换到下一页','info')">›</button>
+        <span class="page-info">第 1/16 页</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  // 点击量数据
+  const clickData = [180, 210, 165, 240, 195, 220, 260, 230, 198, 215, 245, 210, 190, 235, 260, 240, 210, 185, 225, 250, 230, 210, 195, 240, 260, 235, 210, 250, 270, 245];
+  const payData = [18, 22, 16, 28, 20, 24, 30, 26, 19, 23, 28, 22, 18, 25, 32, 27, 22, 17, 26, 29, 24, 21, 18, 27, 31, 26, 22, 28, 33, 26];
+  const labels = [];
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date('2026-06-11');
+    d.setDate(d.getDate() - i);
+    labels.push(`${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);
+  }
+
+  function renderChart(containerId, data) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const max = Math.max(...data);
+    const count = 14;
+    const barWidth = count > 10 ? 16 : 28;
+    const gapSize = count > 10 ? 3 : 6;
+    container.style.gap = gapSize + 'px';
+    container.style.justifyContent = 'space-between';
+    container.innerHTML = data.slice(-14).map((v, i) =>
+      `<div class="chart-bar" style="height:${max > 0 ? (v/max*100) : 0}%;width:${barWidth}px;min-width:${barWidth}px;" title="${labels[labels.length-14+i]}: ${v}">
+        <span class="bar-val">${v}</span>
+        <span class="bar-label">${labels[labels.length-14+i]}</span>
+      </div>`
+    ).join('');
+  }
+
+  renderChart('clickChart', clickData);
+  renderChart('payChart', payData);
+</script>
+</body>
+</html>

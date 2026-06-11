@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>收款账户 - 六翼剧场创作者后台</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">六翼剧场创作者后台</div>
+  <nav class="sidebar-menu">
+    <a class="menu-single" href="dashboard.html">工作台</a>
+
+    <div class="menu-category" onclick="toggleMenu(this)">
+      收益管理 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="revenue-list.html">收益明细</a>
+      <a class="sub-item" href="revenue-withdraw.html">提现</a>
+      <a class="sub-item" href="revenue-settlement.html">结算记录</a>
+    </div>
+
+    <div class="menu-category" onclick="toggleMenu(this)">
+      我的推广 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="promotion-dramas.html">推广剧目</a>
+      <a class="sub-item" href="promotion-data.html">推广数据</a>
+      <a class="sub-item" href="promotion-team.html">推广团队</a>
+    </div>
+
+    <div class="menu-category" onclick="toggleMenu(this)">
+      账户中心 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="account-real-name.html">实名认证</a>
+      <a class="sub-item active" href="account-payment.html">收款账户</a>
+      <a class="sub-item" href="account-security.html">安全设置</a>
+      <a class="sub-item" href="account-profile.html">个人资料</a>
+    </div>
+  </nav>
+</aside>
+
+<div class="main">
+  <header class="header">
+    <div class="header-left"><span>🏦 收款账户</span></div>
+    <div class="header-right">
+      <div class="user-info" onclick="event.stopPropagation();toggleUserMenu(event)" style="cursor:pointer;position:relative;">
+        <div class="avatar" style="cursor:pointer;">许</div>
+        <div style="display:flex;flex-direction:column;"><div style="font-weight:500;font-size:14px;color:#444;">许锦超</div><div style="font-size:12px;color:#aaa;">达人ID: DR23001</div></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <!-- 当前绑定账户 -->
+    <div class="card">
+      <div class="card-header">
+        <span>当前绑定账户</span>
+        <button class="btn btn-sm" onclick="showChangeForm()">＋ 新增</button>
+      </div>
+
+      <!-- 支付宝 -->
+      <div style="display:flex;align-items:center;gap:16px;padding:16px;background:#f5f5f5;margin-bottom:12px;">
+        <div style="font-size:40px;">💳</div>
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:16px;">支付宝</div>
+          <div style="color:#666;margin-top:4px;">账户：152****1219</div>
+          <div style="color:#666;">实名：许锦超</div>
+        </div>
+        <div>
+          <span class="tag tag-success">默认账户</span>
+          <span class="tag tag-info">已绑定</span>
+        </div>
+      </div>
+
+      <!-- 银行卡 -->
+      <div style="display:flex;align-items:center;gap:16px;padding:16px;background:#fafafa;">
+        <div style="font-size:40px;">🏦</div>
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:16px;">招商银行</div>
+          <div style="color:#666;margin-top:4px;">卡号：6214 **** **** 1148</div>
+          <div style="color:#666;">持卡人：许锦超</div>
+        </div>
+        <div>
+          <span class="tag tag-info">已绑定</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 更换绑定表单 -->
+    <div class="card" id="changeForm" style="display:none;">
+      <div class="card-header">
+        <span>新增绑定账户</span>
+        <button class="modal-close" onclick="hideChangeForm()">✕</button>
+      </div>
+
+      <div style="max-width:500px;">
+        <div class="form-group">
+          <label class="required">账户类型</label>
+          <select class="form-select" onchange="toggleAccountType(this.value)">
+            <option value="alipay">支付宝</option>
+            <option value="bank">银行卡</option>
+          </select>
+        </div>
+
+        <!-- 支付宝 -->
+        <div id="alipayForm">
+          <div class="form-group">
+            <label class="required">姓名</label>
+            <input type="text" class="form-input" value="许锦超" readonly style="background:#f5f5f5;">
+            <div class="form-hint">与实名认证姓名一致，不可修改</div>
+          </div>
+          <div class="form-group">
+            <label class="required">支付宝账号</label>
+            <input type="text" class="form-input" placeholder="请输入支付宝账号" value="15260621219">
+          </div>
+        </div>
+
+        <!-- 银行卡 -->
+        <div id="bankForm" style="display:none;">
+          <div class="form-group">
+            <label class="required">持卡人姓名</label>
+            <input type="text" class="form-input" value="许锦超" readonly style="background:#f5f5f5;">
+            <div class="form-hint">与实名认证姓名一致，不可修改</div>
+          </div>
+          <div class="form-group">
+            <label class="required">银行卡号</label>
+            <input type="text" class="form-input" placeholder="请输入银行卡号" value="6214836075491148">
+          </div>
+          <div class="form-group">
+            <label class="required">开户行</label>
+            <input type="text" class="form-input" placeholder="例如：招商银行北京分行" value="招商银行">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>开户省份</label>
+              <select class="form-select"><option>北京市</option><option>上海市</option><option selected>浙江省</option></select>
+            </div>
+            <div class="form-group">
+              <label>开户城市</label>
+              <select class="form-select"><option>杭州市</option><option selected>宁波市</option><option>温州市</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="required">短信验证码</label>
+          <div style="display:flex;gap:8px;">
+            <input type="text" class="form-input" placeholder="请输入6位验证码" style="width:200px;" maxlength="6">
+            <button class="btn" onclick="sendSmsCode(this)">获取验证码</button>
+          </div>
+          <div class="form-hint">验证码将发送至绑定手机号 152****1219</div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary btn-lg" onclick="submitChange()">确认新增</button>
+          <button class="btn btn-lg" onclick="hideChangeForm()">取消</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 安全提示 -->
+    <div class="card" style="background:#fafafa;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="font-size:24px;">🔒</span>
+        <div>
+          <div style="font-weight:600;">账户安全提醒</div>
+          <div style="font-size:13px;color:#666;">解绑账户需短信验证，更换绑定账户将影响提现流程，请确保信息准确。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  function showChangeForm() {
+    document.getElementById('changeForm').style.display = 'block';
+  }
+  function hideChangeForm() {
+    document.getElementById('changeForm').style.display = 'none';
+  }
+  function toggleAccountType(type) {
+    document.getElementById('alipayForm').style.display = type === 'alipay' ? 'block' : 'none';
+    document.getElementById('bankForm').style.display = type === 'bank' ? 'block' : 'none';
+  }
+  function sendSmsCode(btn) {
+    btn.disabled = true;
+    let count = 60;
+    btn.textContent = count + 's';
+    const timer = setInterval(() => {
+      count--;
+      if (count <= 0) {
+        clearInterval(timer);
+        btn.disabled = false;
+        btn.textContent = '获取验证码';
+      } else {
+        btn.textContent = count + 's';
+      }
+    }, 1000);
+    showToast('验证码已发送至 138****5678', 'success');
+  }
+  function submitChange() {
+    showToast('账户信息已更新', 'success');
+    hideChangeForm();
+  }
+</script>
+</body>
+</html>

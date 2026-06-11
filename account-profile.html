@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人资料 - 六翼剧场创作者后台</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">六翼剧场创作者后台</div>
+  <nav class="sidebar-menu">
+    <a class="menu-single" href="dashboard.html">工作台</a>
+
+    <div class="menu-category" onclick="toggleMenu(this)">
+      收益管理 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="revenue-list.html">收益明细</a>
+      <a class="sub-item" href="revenue-withdraw.html">提现</a>
+      <a class="sub-item" href="revenue-settlement.html">结算记录</a>
+    </div>
+
+    <div class="menu-category" onclick="toggleMenu(this)">
+      我的推广 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="promotion-dramas.html">推广剧目</a>
+      <a class="sub-item" href="promotion-data.html">推广数据</a>
+      <a class="sub-item" href="promotion-team.html">推广团队</a>
+    </div>
+
+    <div class="menu-category" onclick="toggleMenu(this)">
+      账户中心 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="account-real-name.html">实名认证</a>
+      <a class="sub-item" href="account-payment.html">收款账户</a>
+      <a class="sub-item" href="account-security.html">安全设置</a>
+      <a class="sub-item active" href="account-profile.html">个人资料</a>
+    </div>
+  </nav>
+</aside>
+
+<div class="main">
+  <header class="header">
+    <div class="header-left"><span>👤 个人资料</span></div>
+    <div class="header-right">
+      <div class="user-info" onclick="event.stopPropagation();toggleUserMenu(event)" style="cursor:pointer;position:relative;">
+        <div class="avatar" style="cursor:pointer;">许</div>
+        <div style="display:flex;flex-direction:column;"><div style="font-weight:500;font-size:14px;color:#444;">许锦超</div><div style="font-size:12px;color:#aaa;">达人ID: DR23001</div></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <div style="display:grid;grid-template-columns:1fr 2fr;gap:16px;">
+      <!-- 左列：头像 -->
+      <div class="card" style="text-align:center;">
+        <div class="card-header">头像</div>
+        <div style="margin:24px 0;">
+          <div id="avatarPreview" style="width:120px;height:120px;border-radius:50%;background:#ccc;display:flex;align-items:center;justify-content:center;font-size:48px;color:#fff;margin:0 auto;cursor:pointer;overflow:hidden;position:relative;" onclick="document.getElementById('avatarInput').click()">
+            <span id="avatarText">许</span>
+            <img id="avatarImg" src="" style="display:none;width:100%;height:100%;object-fit:cover;">
+          </div>
+        </div>
+        <input type="file" id="avatarInput" accept="image/png,image/jpeg,image/jpg" style="display:none;" onchange="previewAvatar(this)">
+        <button class="btn" onclick="document.getElementById('avatarInput').click()">更换头像</button>
+        <div class="form-hint mt-8">支持 JPG/PNG，建议 1:1 比例，不超过 2MB</div>
+      </div>
+
+      <!-- 右列：基本信息 -->
+      <div>
+        <div class="card">
+          <div class="card-header">基本信息</div>
+
+          <div class="form-group">
+            <label class="required">昵称</label>
+            <input type="text" class="form-input" placeholder="请输入昵称" value="许锦超" maxlength="20">
+            <div class="form-hint">昵称长度不超过20个字符</div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>QQ号（选填）</label>
+              <input type="text" class="form-input" placeholder="请输入QQ号" value="">
+            </div>
+            <div class="form-group">
+              <label>微信号（选填）</label>
+              <input type="text" class="form-input" placeholder="请输入微信号" value="">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>个人简介（选填）</label>
+            <textarea class="form-textarea" placeholder="简单介绍一下自己" rows="3"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary btn-lg" onclick="showToast('资料已保存','success')">保存修改</button>
+          </div>
+        </div>
+
+        <!-- 账户信息只读卡片 -->
+        <div class="card">
+          <div class="card-header">账户信息（只读）</div>
+          <div class="info-row"><span class="info-label">达人ID</span><span class="info-value">DR23001</span></div>
+          <div class="info-row"><span class="info-label">注册时间</span><span class="info-value">2026-01-15 10:30:00</span></div>
+          <div class="info-row"><span class="info-label">实名状态</span><span class="info-value"><span class="tag tag-success">已认证</span></span></div>
+          <div class="info-row" style="border-bottom:none;">
+            <span class="info-label">绑定手机</span>
+            <span class="info-value">138****5678 <a href="account-security.html" class="btn-link" style="font-size:12px;">去修改</a></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  function previewAvatar(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    // 校验文件大小（2MB）
+    if (file.size > 2 * 1024 * 1024) {
+      showToast('图片大小不能超过 2MB', 'error');
+      input.value = '';
+      return;
+    }
+
+    // 校验文件类型
+    if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
+      showToast('仅支持 JPG/PNG 格式', 'error');
+      input.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = document.getElementById('avatarImg');
+      const text = document.getElementById('avatarText');
+      img.src = e.target.result;
+      img.style.display = 'block';
+      text.style.display = 'none';
+      showToast('头像已更新', 'success');
+    };
+    reader.readAsDataURL(file);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录 - 六翼剧场创作者后台</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: #f7f8fa; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+    .login-wrap { width: 400px; max-width: 92vw; }
+    .login-box { background: #fff; border: 1px solid #ebebeb; border-radius: 16px; padding: 40px 36px; box-shadow: 0 12px 40px rgba(0,0,0,.06); }
+    .login-box .logo { text-align: center; font-size: 32px; margin-bottom: 8px; }
+    .login-box h1 { text-align: center; font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+    .login-box .sub { text-align: center; font-size: 14px; color: #aaa; margin-bottom: 32px; }
+    .login-box .form-group { margin-bottom: 20px; }
+    .login-box .form-group label { font-size: 14px; color: #666; margin-bottom: 8px; }
+    .login-box .form-input { height: 46px; font-size: 15px; padding: 0 16px; border-radius: 10px; }
+    .login-box .form-input:focus { border-color: #e67e22; box-shadow: 0 0 0 3px rgba(230,126,34,.1); }
+    .login-box .btn-login { width: 100%; height: 48px; font-size: 16px; border-radius: 10px; margin-top: 8px; }
+    .login-box .extra { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; font-size: 13px; color: #aaa; }
+    .login-box .extra a { color: #e67e22; }
+    .login-footer { text-align: center; margin-top: 24px; font-size: 13px; color: #bbb; }
+  </style>
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="login-box">
+      <div class="logo">🎬</div>
+      <h1>六翼剧场创作者后台</h1>
+      <div class="sub">达人推广内容管理与收益数据平台</div>
+
+      <form onsubmit="doLogin(event)">
+        <div class="form-group">
+          <label class="required">手机号</label>
+          <input type="tel" class="form-input" id="loginAccount" placeholder="请输入手机号" value="15260621219" maxlength="11">
+        </div>
+        <div class="form-group">
+          <label class="required">密码</label>
+          <input type="password" class="form-input" id="loginPassword" placeholder="请输入密码" value="123456">
+        </div>
+        <button type="submit" class="btn btn-primary btn-login btn-lg">登 录</button>
+      </form>
+
+      <div class="extra">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+          <input type="checkbox" checked> 记住账号
+        </label>
+        <a href="javascript:void(0)" onclick="showToast('请联系客服重置密码','info')">忘记密码？</a>
+      </div>
+    </div>
+    <div class="login-footer">© 2026 六翼剧场创作者后台 · 达人端</div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    function doLogin(e) {
+      e.preventDefault();
+      const account = document.getElementById('loginAccount').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+      if (!account) { showToast('请输入账号', 'error'); return; }
+      if (!password) { showToast('请输入密码', 'error'); return; }
+      showToast('登录成功，正在跳转…', 'success');
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
+    }
+  </script>
+</body>
+</html>

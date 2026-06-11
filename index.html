@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>六翼剧场创作者后台 - 首页导航</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .index-layout { min-height: 100vh; background: #f0f2f5; }
+    .index-header {
+      background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+      color: #fff; padding: 60px 40px; text-align: center; position: relative;
+      border-bottom: 4px solid #e67e22;
+    }
+    .index-header h1 { font-size: 36px; margin-bottom: 8px; }
+    .index-header p { font-size: 16px; opacity: .75; color: #ccc; }
+    .index-content { max-width: 1200px; margin: -40px auto 40px; padding: 0 24px; position: relative; z-index: 1; }
+    .module-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+    .module-card {
+      background: #fff; border-radius: 12px; padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08); cursor: pointer;
+      transition: all .25s; border: 1px solid #f0f0f0;
+    }
+    .module-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(230,126,34,.12); border-color: #e67e22; }
+    .module-card .mc-icon { font-size: 36px; margin-bottom: 12px; }
+    .module-card .mc-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; color: #333; }
+    .module-card .mc-desc { font-size: 13px; color: #999; line-height: 1.6; }
+    .module-card .mc-links { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .module-card .mc-links a {
+      font-size: 12px; padding: 3px 12px; background: #f5f5f5; border-radius: 20px;
+      color: #666; text-decoration: none; transition: all .2s;
+    }
+    .module-card .mc-links a:hover { background: #fef5e7; color: #e67e22; }
+    .index-footer { text-align: center; padding: 24px; color: #999; font-size: 13px; }
+  </style>
+</head>
+<body>
+<div class="index-layout">
+  <div class="index-header">
+    <h1>六翼剧场创作者后台</h1>
+    <p>达人推广内容管理与收益数据平台</p>
+  </div>
+  <div class="index-content">
+    <div class="module-grid">
+
+      <!-- 模块1：工作台 -->
+      <div class="module-card" onclick="location.href='dashboard.html'">
+        <div class="mc-icon">📊</div>
+        <div class="mc-title">达人工作台</div>
+        <div class="mc-desc">登录后第一站，核心收益概览与快捷入口，快速掌握今日收入、本月累计、可提现余额等关键数据。</div>
+        <div class="mc-links">
+          <a href="dashboard.html">工作台首页</a>
+        </div>
+      </div>
+
+      <!-- 模块2：收益管理 -->
+      <div class="module-card" onclick="location.href='revenue-list.html'">
+        <div class="mc-icon">💰</div>
+        <div class="mc-title">收益管理</div>
+        <div class="mc-desc">集中管理全部收益流水、结算与提现。支持日期筛选、类型筛选、查看明细与提现操作。</div>
+        <div class="mc-links">
+          <a href="revenue-list.html">收益明细</a>
+          <a href="revenue-withdraw.html">提现</a>
+          <a href="revenue-settlement.html">结算记录</a>
+        </div>
+      </div>
+
+      <!-- 模块3：我的推广 -->
+      <div class="module-card" onclick="location.href='promotion-dramas.html'">
+        <div class="mc-icon">📢</div>
+        <div class="mc-title">我的推广</div>
+        <div class="mc-desc">获取推广物料、管理推广剧目、查看推广数据与转化效果，支撑达人产生收益。</div>
+        <div class="mc-links">
+          <a href="promotion-dramas.html">推广剧目</a>
+          <a href="promotion-data.html">推广数据</a>
+        </div>
+      </div>
+
+      <!-- 模块4：账户中心 -->
+      <div class="module-card" onclick="location.href='account-real-name.html'">
+        <div class="mc-icon">👤</div>
+        <div class="mc-title">账户中心</div>
+        <div class="mc-desc">管理身份实名信息、收款方式、账号安全设置，完成实名认证后方可使用提现、推广功能。</div>
+        <div class="mc-links">
+          <a href="account-real-name.html">实名认证</a>
+          <a href="account-payment.html">收款账户</a>
+          <a href="account-security.html">安全设置</a>
+          <a href="account-profile.html">个人资料</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top: 32px;">
+      <div class="card">
+        <div class="card-header">📋 系统功能全景图</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;">
+          <div style="text-align:center;padding:16px;min-width:120px;">
+            <div style="font-size:32px;">📊</div>
+            <div style="font-weight:600;margin:6px 0;">工作台</div>
+            <div style="font-size:12px;color:#999;">核心数据概览</div>
+          </div>
+          <div style="font-size:32px;color:#ddd;display:flex;align-items:center;">→</div>
+          <div style="text-align:center;padding:16px;min-width:120px;">
+            <div style="font-size:32px;">💰</div>
+            <div style="font-weight:600;margin:6px 0;">收益管理</div>
+            <div style="font-size:12px;color:#999;">流水·提现·结算</div>
+          </div>
+          <div style="font-size:32px;color:#ddd;display:flex;align-items:center;">←→</div>
+          <div style="text-align:center;padding:16px;min-width:120px;">
+            <div style="font-size:32px;">📢</div>
+            <div style="font-weight:600;margin:6px 0;">我的推广</div>
+            <div style="font-size:12px;color:#999;">物料·数据·转化</div>
+          </div>
+          <div style="font-size:32px;color:#ddd;display:flex;align-items:center;">→</div>
+          <div style="text-align:center;padding:16px;min-width:120px;">
+            <div style="font-size:32px;">👤</div>
+            <div style="font-weight:600;margin:6px 0;">账户中心</div>
+            <div style="font-size:12px;color:#999;">实名·收款·安全</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="index-footer">六翼剧场创作者后台 · 前端设计演示版 v1.0</div>
+</div>
+</body>
+</html>

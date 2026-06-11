@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>收益明细 - 六翼剧场创作者后台</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .sort-icon { cursor:pointer; color:#ddd; font-size:10px; margin-left:4px; user-select:none; }
+    .sort-icon:hover, .sort-icon.active { color:#e67e22; }
+  </style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">六翼剧场创作者后台</div>
+  <nav class="sidebar-menu">
+    <a class="menu-single" href="dashboard.html">工作台</a>
+    <div class="menu-category" onclick="toggleMenu(this)">
+      收益管理 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item active" href="revenue-list.html">收益明细</a>
+      <a class="sub-item" href="revenue-withdraw.html">提现</a>
+      <a class="sub-item" href="revenue-settlement.html">结算记录</a>
+    </div>
+    <div class="menu-category" onclick="toggleMenu(this)">
+      我的推广 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="promotion-dramas.html">推广剧目</a>
+      <a class="sub-item" href="promotion-data.html">推广数据</a>
+      <a class="sub-item" href="promotion-team.html">推广团队</a>
+    </div>
+    <div class="menu-category" onclick="toggleMenu(this)">
+      账户中心 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="account-real-name.html">实名认证</a>
+      <a class="sub-item" href="account-payment.html">收款账户</a>
+      <a class="sub-item" href="account-security.html">安全设置</a>
+      <a class="sub-item" href="account-profile.html">个人资料</a>
+    </div>
+  </nav>
+</aside>
+
+<div class="main">
+  <header class="header">
+    <div class="header-left"><span>📋 收益明细</span></div>
+    <div class="header-right">
+      <div class="user-info" onclick="event.stopPropagation();toggleUserMenu(event)" style="cursor:pointer;position:relative;">
+        <div class="avatar" style="cursor:pointer;">许</div>
+        <div style="display:flex;flex-direction:column;">
+          <div style="font-weight:500;font-size:14px;color:#444;">许锦超</div>
+          <div style="font-size:12px;color:#aaa;">达人ID: DR23001</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <!-- 筛选区 -->
+    <div class="filter-bar" style="padding:16px 20px;">
+      <div class="filter-item">
+        <label>剧目：</label>
+        <input type="text" class="form-input" placeholder="搜索剧目名称" style="min-width:150px;" id="dramaSearch" oninput="applyFilter()">
+      </div>
+      <div class="filter-item">
+        <label>时间：</label>
+        <input type="date" class="form-input" id="dateFrom" value="2025-10-01" style="min-width:140px;">
+        <span style="color:#ddd;">—</span>
+        <input type="date" class="form-input" id="dateTo" value="2026-06-11" style="min-width:140px;">
+      </div>
+      <div class="filter-item">
+        <label>类型：</label>
+        <select class="form-select" id="typeFilter">
+          <option value="all">全部</option>
+          <option value="推广佣金">推广佣金</option>
+          <option value="活动奖励">活动奖励</option>
+          <option value="其他">其他</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label>状态：</label>
+        <select class="form-select" id="statusFilter">
+          <option value="all">全部</option>
+          <option value="已结算">已结算</option>
+          <option value="待结算">待结算</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="applyFilter()">查询</button>
+      <button class="btn" onclick="resetFilter()">重置</button>
+      <button class="btn" onclick="showToast('正在导出数据...','info')" style="margin-left:auto;">📥 导出</button>
+    </div>
+
+    <!-- 汇总统计条 -->
+    <div style="display:flex;gap:12px;margin-bottom:16px;">
+      <div style="flex:1;padding:14px 20px;border:1px solid #eee;border-radius:10px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;color:#aaa;">当前总收益</span>
+        <span style="font-size:22px;font-weight:700;color:#222;letter-spacing:-0.5px;" id="totalRevenue">¥0.00</span>
+      </div>
+      <div style="flex:1;padding:14px 20px;border:1px solid #eee;border-radius:10px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;color:#aaa;">订单数</span>
+        <span style="font-size:22px;font-weight:700;color:#222;" id="totalOrders">0</span>
+      </div>
+      <div style="flex:1;padding:14px 20px;border:1px solid #eee;border-radius:10px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;color:#aaa;">已结算金额</span>
+        <span style="font-size:22px;font-weight:700;color:#222;" id="settledRevenue">¥0.00</span>
+      </div>
+    </div>
+
+    <!-- 数据表格 -->
+    <div class="card" style="padding:0;">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:36px;"><input type="checkbox" onchange="toggleAllRows(this)"></th>
+              <th>产生时间</th>
+              <th>推广剧目</th>
+              <th>用户手机号</th>
+              <th>订单金额</th>
+              <th>分成</th>
+              <th>收益金额</th>
+              <th>结算状态</th>
+              <th style="width:60px;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- 分页 -->
+      <div style="padding:16px 20px;border-top:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:12px;color:#aaa;" id="pageInfo">显示 0 条</span>
+        <div class="pagination" style="margin:0;" id="pagination"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 详情弹窗 -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span>收益详情</span>
+      <button class="modal-close" onclick="hideModal('detailModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" id="detailContent"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="hideModal('detailModal')">关闭</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+// ====== 完整数据（2025年10月 ~ 2026年6月）======
+const DRAMAS = ['重生之都市仙尊','闪婚后大佬他后悔了','我的冰山总裁老婆','系统觉醒：我主宰万物','替身新娘','至尊神医','豪门千金归来','逆天邪神'];
+const RATIOS = { '重生之都市仙尊':0.5,'闪婚后大佬他后悔了':0.45,'我的冰山总裁老婆':0.5,'系统觉醒：我主宰万物':0.45,'替身新娘':0.4,'至尊神医':0.5,'豪门千金归来':0.45,'逆天邪神':0.5 };
+const PHONES = ['138****5678','159****2341','186****7890','137****3456','150****6789','182****1122','176****3344','153****5566','189****7788','135****9900'];
+
+function randomItem(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+// 生成从2025-10到2026-06的收益数据
+let allData = [];
+let orderIdCounter = 1;
+
+function pad(n) { return String(n).padStart(2,'0'); }
+
+for (let year = 2025; year <= 2026; year++) {
+  const startMonth = (year === 2025) ? 10 : 1;
+  const endMonth = (year === 2025) ? 12 : 6;
+  for (let m = startMonth; m <= endMonth; m++) {
+    const daysInMonth = new Date(year, m, 0).getDate();
+    // 每月 8~14 条记录
+    const count = 8 + Math.floor(Math.random() * 7);
+    for (let i = 0; i < count; i++) {
+      const day = 1 + Math.floor(Math.random() * daysInMonth);
+      const hour = 8 + Math.floor(Math.random() * 13);
+      const min = Math.floor(Math.random() * 60);
+      const drama = randomItem(DRAMAS);
+      const orderAmount = Math.round((300 + Math.random() * 3000) * 100) / 100;
+      const ratio = RATIOS[drama];
+      const commission = Math.round(orderAmount * ratio * 100) / 100;
+      const isSettled = (year < 2026 || (year === 2026 && m < 6) || (year === 2026 && m === 6 && day < 11));
+      const type = Math.random() > 0.15 ? '推广佣金' : (Math.random() > 0.5 ? '活动奖励' : '其他');
+      const orderId = 'ORD' + year + pad(m) + pad(day) + pad(orderIdCounter++);
+      allData.push({
+        id: orderId,
+        time: year + '-' + pad(m) + '-' + pad(day) + ' ' + pad(hour) + ':' + pad(min),
+        drama: type === '推广佣金' ? drama : (type === '活动奖励' ? '活动奖励' : '其他'),
+        phone: type === '推广佣金' ? randomItem(PHONES) : '—',
+        orderAmount: type === '推广佣金' ? orderAmount : (type === '活动奖励' ? '—' : '—'),
+        ratio: type === '推广佣金' ? (ratio * 100) + '%' : '—',
+        commission: type === '推广佣金' ? commission : (type === '活动奖励' ? Math.round((50 + Math.random() * 200) * 100) / 100 : Math.round((20 + Math.random() * 100) * 100) / 100),
+        status: isSettled ? '已结算' : '待结算',
+        type: type,
+        userId: 'U' + year + pad(m) + pad(day) + pad(Math.floor(100 + Math.random()*900)),
+        dramaId: 'DR' + pad(DRAMAS.indexOf(drama)+1)
+      });
+    }
+  }
+}
+
+// 按时间降序排列
+allData.sort((a,b) => b.time.localeCompare(a.time));
+
+// ====== 分页与渲染 ======
+const PAGE_SIZE = 10;
+let currentPage = 1;
+let filteredData = [...allData];
+let detailMap = {};
+
+function applyFilter() {
+  const search = document.getElementById('dramaSearch').value.trim().toLowerCase();
+  const typeVal = document.getElementById('typeFilter').value;
+  const statusVal = document.getElementById('statusFilter').value;
+  const dateFrom = document.getElementById('dateFrom').value;
+  const dateTo = document.getElementById('dateTo').value;
+
+  filteredData = allData.filter(d => {
+    if (search && !d.drama.toLowerCase().includes(search) && d.type !== '活动奖励') return false;
+    if (statusVal !== 'all' && d.status !== statusVal) return false;
+    if (typeVal !== 'all' && d.type !== typeVal) return false;
+    if (dateFrom) {
+      const dDate = d.time.substring(0,10);
+      if (dDate < dateFrom) return false;
+      if (dateTo && dDate > dateTo) return false;
+    }
+    return true;
+  });
+
+  currentPage = 1;
+  renderPage();
+}
+
+function resetFilter() {
+  document.getElementById('dramaSearch').value = '';
+  document.getElementById('typeFilter').value = 'all';
+  document.getElementById('statusFilter').value = 'all';
+  document.getElementById('dateFrom').value = '2025-10-01';
+  document.getElementById('dateTo').value = '2026-06-11';
+  filteredData = [...allData];
+  currentPage = 1;
+  renderPage();
+  showToast('已重置筛选条件','info');
+}
+
+function renderPage() {
+  const totalPages = Math.ceil(filteredData.length / PAGE_SIZE) || 1;
+  if (currentPage < 1) currentPage = 1;
+  if (currentPage > totalPages) currentPage = totalPages;
+
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const end = Math.min(start + PAGE_SIZE, filteredData.length);
+  const pageData = filteredData.slice(start, end);
+
+  // 更新汇总
+  let totalRev = 0, settledRev = 0;
+  filteredData.forEach(d => {
+    const v = parseFloat(d.commission) || 0;
+    totalRev += v;
+    if (d.status === '已结算') settledRev += v;
+  });
+  document.getElementById('totalRevenue').textContent = '¥' + totalRev.toFixed(2);
+  document.getElementById('totalOrders').textContent = filteredData.length;
+  document.getElementById('settledRevenue').textContent = '¥' + settledRev.toFixed(2);
+
+  // 渲染表格（保持固定行数防止高度跳动）
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  pageData.forEach(d => {
+    const statusClass = d.status === '已结算' ? 'tag-success' : 'tag-default';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="checkbox"></td>
+      <td style="white-space:nowrap;font-size:12px;">${d.time}</td>
+      <td style="font-weight:500;">${d.drama}</td>
+      <td>${d.phone}</td>
+      <td>${d.orderAmount !== '—' ? '¥' + d.orderAmount.toFixed(2) : '—'}</td>
+      <td>${d.ratio}</td>
+      <td style="font-weight:600;">¥${d.commission.toFixed(2)}</td>
+      <td><span class="tag ${statusClass}">${d.status}</span></td>
+      <td><a class="btn-link" onclick="showDetail('${d.id}')">详情</a></td>
+    `;
+    tbody.appendChild(tr);
+
+    // 存储详情
+    detailMap[d.id] = d;
+  });
+
+  // 补充空行保持固定高度（防止翻页跳动）
+  const emptyRows = PAGE_SIZE - pageData.length;
+  for (let i = 0; i < emptyRows; i++) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td colspan="9" style="padding:12px 16px;border-bottom:1px solid #f2f2f2;">&nbsp;</td>';
+    tr.style.cssText = 'pointer-events:none;';
+    tbody.appendChild(tr);
+  }
+
+  // 分页信息
+  document.getElementById('pageInfo').textContent =
+    filteredData.length > 0
+      ? `显示 ${start+1}-${end} 条，共 ${filteredData.length} 条`
+      : '共 0 条';
+
+  // 渲染分页按钮
+  renderPagination(totalPages);
+}
+
+function renderPagination(totalPages) {
+  const container = document.getElementById('pagination');
+  let html = '';
+  html += `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage <= 1 ? 'disabled' : ''}>‹</button>`;
+
+  // 显示最多7个页码
+  let pages = [];
+  if (totalPages <= 7) {
+    for (let i = 1; i <= totalPages; i++) pages.push(i);
+  } else {
+    pages.push(1);
+    if (currentPage > 3) pages.push('...');
+    for (let i = Math.max(2, currentPage-1); i <= Math.min(totalPages-1, currentPage+1); i++) {
+      pages.push(i);
+    }
+    if (currentPage < totalPages-2) pages.push('...');
+    pages.push(totalPages);
+  }
+
+  pages.forEach(p => {
+    if (p === '...') {
+      html += `<span style="padding:6px 4px;color:#bbb;font-size:12px;">…</span>`;
+    } else {
+      html += `<button class="page-btn ${p === currentPage ? 'active' : ''}" onclick="goPage(${p})">${p}</button>`;
+    }
+  });
+
+  html += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage >= totalPages ? 'disabled' : ''}>›</button>`;
+  html += `<span class="page-info">第 ${currentPage}/${totalPages} 页</span>`;
+  container.innerHTML = html;
+}
+
+function goPage(page) {
+  const totalPages = Math.ceil(filteredData.length / PAGE_SIZE) || 1;
+  if (page < 1 || page > totalPages) return;
+  currentPage = page;
+  renderPage();
+}
+
+function showDetail(orderId) {
+  const d = detailMap[orderId];
+  if (!d) return;
+  document.getElementById('detailContent').innerHTML = `
+    <div><div style="font-size:12px;color:#aaa;margin-bottom:4px;">订单号</div><div style="font-size:14px;color:#555;font-weight:500;">${d.id}</div></div>
+    <div><div style="font-size:12px;color:#aaa;margin-bottom:4px;">用户ID</div><div style="font-size:14px;color:#555;">${d.userId}</div></div>
+    <div><div style="font-size:12px;color:#aaa;margin-bottom:4px;">推广剧目</div><div style="font-size:14px;color:#555;">${d.drama}</div></div>
+    <div><div style="font-size:12px;color:#aaa;margin-bottom:4px;">剧目ID</div><div style="font-size:14px;color:#555;">${d.dramaId || '—'}</div></div>
+    <div><div style="font-size:12px;color:#aaa;margin-bottom:4px;">订单金额</div><div style="font-size:14px;color:#555;">${d.orderAmount !== '—' ? '¥' + d.orderAmount.toFixed(2) : '—'}</div></div>
+    <div><div style="font-size:12px;color:#aaa;margin-bottom:4px;">收益类型</div><div style="font-size:14px;color:#555;">${d.type}</div></div>
+    <div><div style="font-size:12px;color:#aaa;margin-bottom:4px;">分成比例</div><div style="font-size:14px;color:#555;">${d.ratio}</div></div>
+    <div><div style="font-size:12px;color:#aaa;margin-bottom:4px;">收益金额</div><div style="font-size:16px;font-weight:600;color:#222;">¥${d.commission.toFixed(2)}</div></div>
+    <div><div style="font-size:12px;color:#aaa;margin-bottom:4px;">结算状态</div><div><span class="tag ${d.status === '已结算' ? 'tag-success' : 'tag-default'}">${d.status}</span></div></div>
+    <div><div style="font-size:12px;color:#aaa;margin-bottom:4px;">产生时间</div><div style="font-size:14px;color:#555;">${d.time}</div></div>
+  `;
+  showModal('detailModal');
+}
+
+function toggleAllRows(el) {
+  document.querySelectorAll('#tableBody input[type="checkbox"]').forEach(c => c.checked = el.checked);
+}
+
+// 初始化
+renderPage();
+</script>
+</body>
+</html>

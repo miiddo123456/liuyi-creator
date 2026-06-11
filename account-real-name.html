@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>实名认证 - 六翼剧场创作者后台</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo">六翼剧场创作者后台</div>
+  <nav class="sidebar-menu">
+    <a class="menu-single" href="dashboard.html">工作台</a>
+    <div class="menu-category" onclick="toggleMenu(this)">
+      收益管理 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="revenue-list.html">收益明细</a>
+      <a class="sub-item" href="revenue-withdraw.html">提现</a>
+      <a class="sub-item" href="revenue-settlement.html">结算记录</a>
+    </div>
+    <div class="menu-category" onclick="toggleMenu(this)">
+      我的推广 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item" href="promotion-dramas.html">推广剧目</a>
+      <a class="sub-item" href="promotion-data.html">推广数据</a>
+      <a class="sub-item" href="promotion-team.html">推广团队</a>
+    </div>
+    <div class="menu-category" onclick="toggleMenu(this)">
+      账户中心 <span class="arrow">▼</span>
+    </div>
+    <div class="sub-menu">
+      <a class="sub-item active" href="account-real-name.html">实名认证</a>
+      <a class="sub-item" href="account-payment.html">收款账户</a>
+      <a class="sub-item" href="account-security.html">安全设置</a>
+      <a class="sub-item" href="account-profile.html">个人资料</a>
+    </div>
+  </nav>
+</aside>
+
+<div class="main">
+  <header class="header">
+    <div class="header-left"><span>🪪 实名认证</span></div>
+    <div class="header-right">
+      <div class="user-info" onclick="event.stopPropagation();toggleUserMenu(event)" style="cursor:pointer;position:relative;">
+        <div class="avatar" style="cursor:pointer;">许</div>
+        <div style="display:flex;flex-direction:column;">
+          <div style="font-weight:500;font-size:14px;color:#444;">许锦超</div>
+          <div style="font-size:12px;color:#aaa;">达人ID: DR23001</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <!-- 已认证状态 -->
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:20px;padding:12px 0 20px;">
+        <div style="width:64px;height:64px;border-radius:50%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:32px;color:#888;">✅</div>
+        <div>
+          <div style="font-size:20px;font-weight:700;color:#222;">实名认证已通过</div>
+          <div style="font-size:13px;color:#aaa;margin-top:4px;">您的身份信息已完成核验，可正常使用提现、推广等功能</div>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid #f0f0f0;padding-top:20px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+          <div>
+            <div style="font-size:12px;color:#aaa;margin-bottom:6px;letter-spacing:0.5px;">真实姓名</div>
+            <div style="font-size:16px;color:#333;font-weight:600;">许锦超</div>
+          </div>
+          <div>
+            <div style="font-size:12px;color:#aaa;margin-bottom:6px;letter-spacing:0.5px;">身份证号</div>
+            <div style="font-size:16px;color:#333;font-weight:600;">350623*******2719</div>
+          </div>
+          <div>
+            <div style="font-size:12px;color:#aaa;margin-bottom:6px;letter-spacing:0.5px;">认证状态</div>
+            <div><span class="tag tag-success" style="font-size:12px;padding:4px 14px;">✅ 已认证</span></div>
+          </div>
+          <div>
+            <div style="font-size:12px;color:#aaa;margin-bottom:6px;letter-spacing:0.5px;">认证方式</div>
+            <div style="font-size:14px;color:#555;">身份证 + 人脸识别</div>
+          </div>
+          <div>
+            <div style="font-size:12px;color:#aaa;margin-bottom:6px;letter-spacing:0.5px;">提交时间</div>
+            <div style="font-size:14px;color:#555;">2026-01-20 14:30:22</div>
+          </div>
+          <div>
+            <div style="font-size:12px;color:#aaa;margin-bottom:6px;letter-spacing:0.5px;">审核时间</div>
+            <div style="font-size:14px;color:#555;">2026-01-20 15:10:05</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 身份证照片 -->
+      <div style="border-top:1px solid #f0f0f0;padding-top:20px;margin-top:20px;">
+        <div style="font-size:12px;color:#aaa;margin-bottom:12px;letter-spacing:0.5px;">已上传身份证照片</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;">
+          <div>
+            <div style="width:280px;border:1px solid #eee;border-radius:8px;overflow:hidden;">
+              <img src="id-card-front.jpg" alt="身份证正面" style="width:100%;display:block;">
+            </div>
+            <div style="font-size:11px;color:#bbb;margin-top:6px;text-align:center;">身份证正面</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 安全提示 -->
+    <div class="card" style="background:#fafafa;border-color:#eee;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <span style="font-size:28px;">🔒</span>
+        <div>
+          <div style="font-weight:600;color:#555;font-size:14px;">信息安全提醒</div>
+          <div style="font-size:13px;color:#999;margin-top:2px;">已认证信息不可修改，如有变更请联系客服处理。您的个人信息受加密保护。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
